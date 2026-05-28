@@ -9,7 +9,6 @@
   
   <style>
     * {
-      box-shrink: 0;
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -106,6 +105,8 @@
       text-align: center;
       border: 4px solid #cbd5e1;
       border-radius: 20px;
+      color: #0f172a;
+      background-color: white;
     }
 
     #unitSelect, #categorySelect {
@@ -116,6 +117,7 @@
       border: 4px solid #cbd5e1;
       border-radius: 20px;
       background-color: #f8fafc;
+      color: #0f172a;
     }
 
     .actions-row {
@@ -315,7 +317,7 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.8);
+      background-color: rgba(0,0,0,0.6);
       padding: 20px;
     }
 
@@ -362,35 +364,44 @@
       line-height: 1;
     }
 
-.add-cat-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-  width: 100%;
-  align-items: center;
-}
-.add-cat-form #newCatIcon {
-  width: 80px !important;
-  min-width: 80px;
-  padding: 15px !important;
-  font-size: 26px !important;
-  text-align: center;
-}
-.add-cat-form #newCatName {
-  flex: 1;
-  width: auto !important;
-  padding: 15px !important;
-  font-size: 26px !important;
-}
-.add-cat-form #saveNewCatBtn {
-  width: 65px !important;
-  min-width: 65px;
-  height: 65px !important;
-  padding: 0 !important;
-  font-size: 26px !important;
-  flex-shrink: 0;
-}
+    /* KATEGÓRIA KEZELŐ FORM SPREAD */
+    .add-cat-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      width: 100%;
+      align-items: center;
     }
+    .add-cat-form #newCatIcon {
+      width: 80px !important;
+      min-width: 80px;
+      padding: 15px !important;
+      font-size: 26px !important;
+      text-align: center;
+      border: 3px solid #cbd5e1;
+      border-radius: 15px;
+      background-color: white;
+      color: #0f172a;
+    }
+    .add-cat-form #newCatName {
+      flex: 1;
+      width: auto !important;
+      padding: 15px !important;
+      font-size: 26px !important;
+      border: 3px solid #cbd5e1;
+      border-radius: 15px;
+      background-color: white;
+      color: #0f172a;
+    }
+    .add-cat-form #saveNewCatBtn {
+      width: 65px !important;
+      min-width: 65px;
+      height: 65px !important;
+      padding: 0 !important;
+      font-size: 26px !important;
+      flex-shrink: 0;
+    }
+
     #categoryManageList {
       max-height: 300px;
       overflow-y: auto;
@@ -407,6 +418,7 @@
       border-radius: 15px;
       font-size: 30px;
       font-weight: bold;
+      color: #0f172a;
     }
     .delete-cat-btn {
       background: none;
@@ -416,79 +428,53 @@
       cursor: pointer;
     }
 
+    /* TERMÉK SZERKESZTŐ STRUKTÚRA FIXALVA */
     .edit-form-container {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-.edit-form-container {
-     display: flex;
-     flex-direction: column;
-     gap: 20px;
-   }
-   /* A név és kategória mezők */
-   .edit-form-container #editItemName, 
-   .edit-form-container #editItemCategoryConfig {
-     width: 100% !important;
-     padding: 25px !important;
-     font-size: 32px !important;
-     font-weight: bold !important;
-     border: 4px solid #cbd5e1 !important;
-     border-radius: 20px !important;
-     background-color: white;
-     display: block;
-   }
-   /* A mennyiségi sor doboza */
-   .edit-amount-row {
-     display: flex !important;
-     flex-direction: row !important;
-     gap: 15px !important;
-     width: 100% !important;
-   }
-   /* A szám beviteli mező fix szélessége */
-   .edit-amount-row #editItemAmount {
-     width: 140px !important;
-     min-width: 140px !important;
-     padding: 25px !important;
-     font-size: 32px !important;
-     font-weight: bold !important;
-     border: 4px solid #cbd5e1 !important;
-     border-radius: 20px !important;
-     text-align: center;
-     background-color: white;
-   }
-   /* A mértékegység választó kitölti a maradék helyet */
-   .edit-amount-row #editItemUnit {
-     flex: 1 !important;
-     width: auto !important;
-     padding: 25px !important;
-     font-size: 32px !important;
-     font-weight: bold !important;
-     border: 4px solid #cbd5e1 !important;
-     border-radius: 20px !important;
-     background-color: white;
-     display: block;
-   }
-    /* SÖTÉT MÓD AUTOMATIKUS BEÁLLÍTÁSA */
-    @media (prefers-color-scheme: dark) {
-      body { background-color: #0f172a; color: #f8fafc; }
-      header h1 { color: #f8fafc; }
-      #listSelect, #itemInput, #amountInput, #unitSelect, #categorySelect, #editItemName, #editItemAmount, #editItemUnit, #editItemCategoryConfig {
-        background-color: #1e293b; color: #f8fafc; border-color: #334155;
-      }
-      #listSelect:focus, #itemInput:focus { border-color: #3b82f6; }
-      .input-area-container, .category-card, .modal-card { background-color: #1e293b; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-      .modal-card h2 { color: #f8fafc; }
-      .category-title { color: #cbd5e1; border-bottom-color: #334155; }
-      .list-item { background-color: #334155; border-color: #475569; }
-      .item-text { color: #f8fafc; }
-      .list-item.checked .item-text { color: #94a3b8; }
-      .checkbox { background-color: #1e293b; border-color: #475569; }
-      .list-item.checked .checkbox { background-color: #475569; border-color: #64748b; }
-      .unit-badge, .edit-btn { background-color: #475569; color: #cbd5e1; }
-      .secondary-btn { background-color: #334155; color: #f8fafc; }
-      .manage-cat-item { background-color: #334155; color: #f8fafc; }
-      .add-cat-form input { background-color: #1e293b; color: #f8fafc; border-color: #334155; }
+    .edit-form-container #editItemName, 
+    .edit-form-container #editItemCategoryConfig {
+      width: 100% !important;
+      padding: 25px !important;
+      font-size: 32px !important;
+      font-weight: bold !important;
+      border: 4px solid #cbd5e1 !important;
+      border-radius: 20px !important;
+      background-color: white !important;
+      color: #0f172a !important;
+      display: block;
+    }
+    .edit-amount-row {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 15px !important;
+      width: 100% !important;
+    }
+    .edit-amount-row #editItemAmount {
+      width: 140px !important;
+      min-width: 140px !important;
+      padding: 25px !important;
+      font-size: 32px !important;
+      font-weight: bold !important;
+      border: 4px solid #cbd5e1 !important;
+      border-radius: 20px !important;
+      text-align: center;
+      background-color: white !important;
+      color: #0f172a !important;
+    }
+    .edit-amount-row #editItemUnit {
+      flex: 1 !important;
+      width: auto !important;
+      padding: 25px !important;
+      font-size: 32px !important;
+      font-weight: bold !important;
+      border: 4px solid #cbd5e1 !important;
+      border-radius: 20px !important;
+      background-color: white !important;
+      color: #0f172a !important;
+      display: block;
     }
   </style>
 </head>
@@ -551,7 +537,7 @@
       <h2>Kategóriák</h2>
       
       <div class="add-cat-form">
-        <input type="text" id="newCatIcon" placeholder="🍞" style="width: 100px; text-align: center;">
+        <input type="text" id="newCatIcon" placeholder="🍞">
         <input type="text" id="newCatName" placeholder="Új...">
         <button id="saveNewCatBtn" class="add-btn"><i class="fas fa-plus"></i></button>
       </div>
@@ -579,7 +565,7 @@
           </select>
         </div>
 
-        <select id="editItemCategoryConfig" style="width:100%;"></select>
+        <select id="editItemCategoryConfig"></select>
         
         <div class="edit-photo-area">
           <input type="file" id="editItemImageInput" accept="image/*" style="display: none;">
