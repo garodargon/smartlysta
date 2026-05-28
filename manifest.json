@@ -1,0 +1,16 @@
+{
+  "short_name": "Smartysta",
+  "name": "Smartysta Bevásárló",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1170/1170576.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#f0f4f8",
+  "theme_color": "#3b82f6",
+  "display": "standalone",
+  "orientation": "portrait"
+}
