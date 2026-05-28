@@ -6,6 +6,7 @@
   <title>Smartysta</title>
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  
   <style>
     * {
       box-sizing: border-box;
@@ -27,6 +28,7 @@
       width: 100%;
       max-width: 600px;
       background: none;
+      position: relative;
     }
 
     header h1 {
@@ -41,7 +43,31 @@
       gap: 15px;
     }
 
-    /* LISTAVÁLASZTÓ ÓRIÁS MEZŐ */
+    /* BEÚSZÓ ÉRTESÍTÉSI SÁV */
+    .app-notification {
+      position: fixed;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 500px;
+      background-color: #2563eb;
+      color: white;
+      padding: 20px 25px;
+      border-radius: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 99999;
+      transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .app-notification.show {
+      top: 20px;
+    }
+
     .list-selector-area {
       display: flex;
       gap: 15px;
@@ -59,7 +85,6 @@
       color: #0f172a;
     }
 
-    /* ÓRIÁS BEVITELI MEZŐK */
     .input-area-container {
       background: white;
       padding: 25px;
@@ -181,7 +206,6 @@
       cursor: pointer;
     }
 
-    /* KATEGÓRIA KÁRTYÁK ÉS LISTAELEMEK */
     .category-card {
       background: white;
       border-radius: 30px;
@@ -215,7 +239,6 @@
       border: 2px solid #e2e8f0;
     }
 
-    /* HATALMAS PIPADOBOZ */
     .checkbox {
       width: 70px;
       height: 70px;
@@ -313,7 +336,6 @@
       cursor: pointer;
     }
 
-    /* MODAL ABLAKOK (Fotó nagyítás, szerkesztés) */
     .modal {
       display: none;
       position: fixed;
@@ -369,7 +391,6 @@
       line-height: 1;
     }
 
-    /* KATEGÓRIA MENEDZSER */
     .add-cat-form {
       display: flex;
       gap: 15px;
@@ -406,7 +427,6 @@
       cursor: pointer;
     }
 
-    /* TERMÉK SZERKESZTŐ */
     .edit-form-container {
       display: flex;
       flex-direction: column;
@@ -423,7 +443,8 @@
       display: flex;
       gap: 15px;
     }
-        /* SÖTÉT MÓD AUTOMATIKUS BEÁLLÍTÁSA */
+
+    /* SÖTÉT MÓD AUTOMATIKUS BEÁLLÍTÁSA */
     @media (prefers-color-scheme: dark) {
       body {
         background-color: #0f172a;
@@ -486,13 +507,20 @@
         color: #f8fafc;
         border-color: #334155;
       }
+      .app-notification {
+        background-color: #3b82f6;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+      }
     }
-
   </style>
 </head>
 <body>
 
   <div class="app-container">
+    <div id="appNotification" class="app-notification">
+      <i class="fas fa-bell"></i> <span id="notificationText">A lista frissült!</span>
+    </div>
+
     <header>
       <h1>🛒 Smartysta <span id="syncIndicator" style="font-size: 32px; color: #e74c3c;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span></h1>
     </header>
@@ -612,6 +640,8 @@
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const removeImageBtn = document.getElementById('removeImageBtn');
     const syncIndicator = document.getElementById('syncIndicator');
+    const appNotification = document.getElementById('appNotification');
+    const notificationText = document.getElementById('notificationText');
 
     const imgModal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
@@ -641,218 +671,6 @@
     let currentBase64Image = "";
     let editingItemIndex = null;
     let editingBase64Image = "";
-
-    const defaultCategories = {
-      'Pékáru': { icon: '🍞' },
-      'Tejtermék': { icon: '🥛' },
-      'Zöldség-Gyümölcs': { icon: '🍎' },
-      'Húsáru': { icon: '🥩' },
-      'Szárazáru': { icon: '🍝' },
-      'Vegyszer': { icon: '🧼' },
-      'Háztartás': { icon: '🧻' },
-      'Egyéb': { icon: '❓' }
-    };
-    let customCategories = defaultCategories;
-
-    function saveAllToCloud() {
-      localStorage.setItem('currentShoppingListName', currentListName);
-      fetch(`${FIREBASE_DB_URL}data.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lists: allLists, categories: customCategories })
-      }).catch(err => console.error("Felhő hiba:", err));
-    }
-
-    function startCloudSync() {
-      const targetUrl = `${FIREBASE_DB_URL}data.json`;
-      const eventSource = new EventSource(targetUrl);
-
-      eventSource.addEventListener('put', function(event) {
-        try {
-          const response = JSON.parse(event.data);
-          if (response && response.data) {
-            const remoteData = response.data;
-            if (response.path === "/") {
-              if (remoteData.lists) allLists = remoteData.lists;
-              if (remoteData.categories) customCategories = remoteData.categories;
-            } else if (response.path === "/lists") { allLists = remoteData; }
-              else if (response.path === "/categories") { customCategories = remoteData; }
-            if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
-            syncIndicator.style.color = "#2ecc71";
-            updateCategoryDropdowns();
-            updateSelector();
-            renderList();
-          }
-        } catch (e) {}
-      });
-
-      eventSource.onmessage = function(event) {
-        try {
-          const response = JSON.parse(event.data);
-          if (response && response.data) {
-            const remoteData = response.data;
-            if (remoteData.lists) allLists = remoteData.lists;
-            if (remoteData.categories) customCategories = remoteData.categories;
-            if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
-            syncIndicator.style.color = "#2ecc71";
-            updateCategoryDropdowns();
-            updateSelector();
-            renderList();
-          }
-        } catch(err) {}
-      };
-
-      eventSource.onerror = function() {
-        fetch(targetUrl).then(res => res.json()).then(remoteData => {
-          if (remoteData) {
-            syncIndicator.style.color = "#2ecc71";
-            if (remoteData.lists) allLists = remoteData.lists;
-            if (remoteData.categories) customCategories = remoteData.categories;
-            updateCategoryDropdowns();
-            updateSelector();
-            renderList();
-          }
-        }).catch(() => { syncIndicator.style.color = "#e74c3c"; });
-      };
-    }
-
-    function updateCategoryDropdowns() {
-      categorySelect.innerHTML = '';
-      editItemCategoryConfig.innerHTML = '';
-      Object.keys(customCategories).forEach(catName => {
-        const text = `${customCategories[catName].icon} ${catName}`;
-        const option1 = document.createElement('option'); option1.value = catName; option1.textContent = text;
-        categorySelect.appendChild(option1);
-        const option2 = document.createElement('option'); option2.value = catName; option2.textContent = text;
-        editItemCategoryConfig.appendChild(option2);
-      });
-    }
-
-    function updateSelector() {
-      listSelect.innerHTML = '';
-      Object.keys(allLists).forEach(name => {
-        const option = document.createElement('option'); option.value = name;
-        const activeCount = allLists[name] ? allLists[name].filter(item => !item.checked).length : 0;
-        option.textContent = name + ` (${activeCount})`;
-        if (name === currentListName) option.selected = true;
-        listSelect.appendChild(option);
-      });
-    }
-
-    function renderList() {
-      shoppingList.innerHTML = '';
-      const items = allLists[currentListName] || [];
-      if (items.length === 0) { shoppingList.innerHTML = '<div class="empty-state">Ez a lista még üres.</div>'; return; }
-      const groupedItems = {};
-      const availableCategories = Object.keys(customCategories);
-      const fallbackCategory = availableCategories[0] || 'Egyéb';
-
-      items.forEach((item, originalIndex) => {
-        let cat = item.category || fallbackCategory;
-        if (!customCategories[cat]) cat = fallbackCategory;
-        if (!groupedItems[cat]) groupedItems[cat] = [];
-        groupedItems[cat].push({ ...item, originalIndex });
-      });
-
-      availableCategories.forEach(categoryName => {
-        const categoryGroup = groupedItems[categoryName];
-        if (!categoryGroup || categoryGroup.length === 0) return;
-        const config = customCategories[categoryName];
-        const cardDiv = document.createElement('div'); cardDiv.className = 'category-card';
-        cardDiv.innerHTML = `<div class="category-title">${config.icon} ${categoryName}</div>`;
-        const listContainer = document.createElement('div'); listContainer.className = 'item-list-container';
-
-        categoryGroup.forEach(item => {
-          const itemDiv = document.createElement('div');
-          itemDiv.className = `list-item ${item.checked ? 'checked' : ''}`;
-          const imgHtml = item.image ? `<img src="${item.image}" class="item-img">` : '';
-          itemDiv.innerHTML = `
-            <div class="checkbox">${item.checked ? '<i class="fas fa-check"></i>' : ''}</div>
-            <div class="item-text-container"><span class="item-text">${item.name}</span><span class="unit-badge">${item.amount} ${item.unit}</span></div>
-            ${imgHtml}
-            <div class="item-actions">
-              <button class="edit-btn"><i class="fas fa-pencil-alt"></i></button>
-              <button class="delete-btn"><i class="fas fa-trash"></i></button>
-            </div>
-          `;
-          itemDiv.querySelectorAll('.checkbox, .item-text-container').forEach(el => {
-            el.onclick = () => { allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; saveAllToCloud(); };
-          });
-          if (item.image) { itemDiv.querySelector('.item-img').onclick = () => { imgModal.style.display = "block"; modalImg.src = item.image; }; }
-          itemDiv.querySelector('.delete-btn').onclick = () => { allLists[currentListName].splice(item.originalIndex, 1); saveAllToCloud(); };
-          itemDiv.querySelector('.edit-btn').onclick = () => { openEditModalWindow(item.originalIndex); };
-          listContainer.appendChild(itemDiv);
-        });
-        cardDiv.appendChild(listContainer); shoppingList.appendChild(cardDiv);
-      });
-    }
-
-    function openEditModalWindow(index) {
-      editingItemIndex = index; const item = allLists[currentListName][index];
-      editItemName.value = item.name; editItemAmount.value = item.amount; editItemUnit.value = item.unit;
-      editItemCategoryConfig.value = item.category || Object.keys(customCategories)[0] || 'Egyéb';
-      editingBase64Image = item.image || "";
-      editImagePreview.style.display = editingBase64Image ? 'flex' : 'none';
-      editItemModal.style.display = "block";
-    }
-
-    saveEditItemBtn.onclick = () => {
-      if (editingItemIndex === null) return; const name = editItemName.value.trim(); if (name === "") return;
-      allLists[currentListName][editingItemIndex] = { name, amount: editItemAmount.value || "1", unit: editItemUnit.value, category: editItemCategoryConfig.value, image: editingBase64Image, checked: allLists[currentListName][editingItemIndex].checked };
-      saveAllToCloud(); editItemModal.style.display = "none"; editingItemIndex = null;
-    };
-
-    editItemPhotoBtn.onclick = () => editItemImageInput.click();
-    editItemImageInput.onchange = function() {
-      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { editingBase64Image = e.target.result; editImagePreview.style.display = 'flex'; }; reader.readAsDataURL(file); }
-    };
-    removeEditImageBtn.onclick = () => { editingBase64Image = ""; editItemImageInput.value = ""; editImagePreview.style.display = 'none'; };
-
-    function renderManageCategoryList() {
-      categoryManageList.innerHTML = '';
-      Object.keys(customCategories).forEach(catName => {
-        const item = customCategories[catName]; const itemDiv = document.createElement('div'); itemDiv.className = 'manage-cat-item';
-        itemDiv.innerHTML = `<span>${item.icon} ${catName}</span><button class="delete-cat-btn" data-name="${catName}"><i class="fas fa-minus-circle"></i></button>`;
-        categoryManageList.appendChild(itemDiv);
-      });
-      document.querySelectorAll('.delete-cat-btn').forEach(btn => {
-        btn.onclick = () => {
-          const catToDelete = btn.getAttribute('data-name'); const keys = Object.keys(customCategories); if (keys.length <= 1) return;
-          const fallback = keys.find(k => k !== catToDelete) || 'Egyéb';
-          if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { delete customCategories[catToDelete]; saveAllToCloud(); renderManageCategoryList(); }
-        };
-      });
-    }
-
-    saveNewCatBtn.onclick = () => {
-      const name = newCatName.value.trim(); const icon = newCatIcon.value.trim() || '📦'; if (name === '' || customCategories[name]) return;
-      customCategories[name] = { icon }; newCatName.value = ''; newCatIcon.value = ''; saveAllToCloud(); renderManageCategoryList();
-    };
-
-    manageCatsBtn.onclick = () => { catModal.style.display = "block"; renderManageCategoryList(); };
-    closeCatModal.onclick = () => catModal.style.display = "none";
-    closeImgModal.onclick = () => imgModal.style.display = "none";
-    closeEditModal.onclick = () => editItemModal.style.display = "none";
-    window.onclick = e => { if (e.target === imgModal) imgModal.style.display = "none"; if (e.target === catModal) catModal.style.display = "none"; if (e.target === editItemModal) editItemModal.style.display = "none"; };
-
-    photoBtn.onclick = () => imageInput.click();
-    imageInput.onchange = function() {
-      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { currentBase64Image = e.target.result; photoBtn.classList.add('has-image'); imagePreviewContainer.style.display = 'flex'; }; reader.readAsDataURL(file); }
-    };
-    removeImageBtn.onclick = () => { currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; };
-
-    function addItem() {
-      const name = itemInput.value.trim(); const amount = amountInput.value.trim() || "1"; const unit = unitSelect.value; const category = categorySelect.value || Object.keys(customCategories)[0] || 'Egyéb';
-      if (name !== '') { if (!allLists[currentListName]) allLists[currentListName] = []; allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; saveAllToCloud(); itemInput.focus(); }
-    }
-
-    newListBtn.onclick = () => { const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; allLists[trimmed] = []; currentListName = trimmed; saveAllToCloud(); };
-    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
-
-    addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
-    listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
-
-    updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
-  </script>
-</body>
-</html>
+    
+    // AZ UTOLSÓ MENTETT ADAT ÁLLAPOTA (Ehhez hasonlítjuk az újat, hogy lássuk, jött-e távoli változás)
+    let lastKnownDataString = "";
