@@ -783,7 +783,7 @@
       });
     }
 
-    function renderList() {
+   function renderList() {
       shoppingList.innerHTML = '';
       const items = allLists[currentListName] || [];
       if (items.length === 0) { shoppingList.innerHTML = '<div class="empty-state">Ez a lista még üres.</div>'; return; }
@@ -791,16 +791,25 @@
       const availableCategories = Object.keys(customCategories);
       const fallbackCategory = availableCategories[0] || 'Egyéb';
 
-      items.forEach((item, originalIndex) => {
+      // VÉGIGMEGYÜNK A LISTÁN FORDÍTOTT SORRENDBEN (így a legújabb lesz az első)
+      for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
         let cat = item.category || fallbackCategory;
         if (!customCategories[cat]) cat = fallbackCategory;
         if (!groupedItems[cat]) groupedItems[cat] = [];
-        groupedItems[cat].push({ ...item, originalIndex });
-      });
+        
+        // Eltároljuk az eredeti indexet is a törléshez/pipáláshoz
+        groupedItems[cat].push({ ...item, originalIndex: i });
+      }
 
       availableCategories.forEach(categoryName => {
         const categoryGroup = groupedItems[categoryName];
         if (!categoryGroup || categoryGroup.length === 0) return;
+        
+        // RENDEZÉS: A kategórián belül a még aktív (be nem pipált) tételek maradjanak felül,
+        // de mindkét csoporton belül (aktív és kész) megmarad az időrendi (új az első) sorrend.
+        categoryGroup.sort((a, b) => a.checked - b.checked);
+
         const config = customCategories[categoryName];
         const cardDiv = document.createElement('div'); cardDiv.className = 'category-card';
         cardDiv.innerHTML = `<div class="category-title">${config.icon} ${categoryName}</div>`;
