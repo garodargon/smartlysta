@@ -408,6 +408,7 @@
       border-radius: 15px !important;
       background-color: white !important;
       color: #0f172a !important;
+      display: block;
     }
     .add-cat-form #saveNewCatBtn {
       width: 65px !important;
@@ -640,8 +641,11 @@
     let editingBase64Image = "";
     let isLocalAction = false; 
 
-    // REZGÉS GLOBÁLIS BEÁLLÍTÁSA (alapértelmezett: true, azaz be van kapcsolva)
     let isVibrationEnabled = localStorage.getItem('vibrationEnabled') !== 'false';
+    
+    // APP BADGE (IKON JELVÉNY) SZÁMLÁLÓ
+    let badgeCount = 0;
+    let isAppFocused = true;
 
     const defaultCategories = {
       'Pékáru': { icon: '🍞' },
@@ -653,9 +657,31 @@
       'Háztartás': { icon: '🧻' },
       'Egyéb': { icon: '❓' }
     };
-    let customCategories = defaultCategories;
+    let customCategories = {};
 
-    // KAPCSOLÓ INTERFÉSZ FRISSÍTÉSE
+    // FIGYELJÜK, HOGY NYITVA VAN-E AZ APP (HA IGEN, NULLÁZZUK A BADGE-ET)
+    window.addEventListener('focus', () => {
+      isAppFocused = true;
+      clearAppBadge();
+    });
+    window.addEventListener('blur', () => {
+      isAppFocused = false;
+    });
+
+    function updateAppBadge() {
+      if (!isAppFocused && 'setAppBadge' in navigator) {
+        badgeCount++;
+        navigator.setAppBadge(badgeCount).catch(err => console.log(err));
+      }
+    }
+
+    function clearAppBadge() {
+      badgeCount = 0;
+      if ('clearAppBadge' in navigator) {
+        navigator.clearAppBadge().catch(err => console.log(err));
+      }
+    }
+
     function updateVibeToggleButtonUI() {
       if (isVibrationEnabled) {
         vibeToggleBtn.classList.remove('muted');
@@ -670,13 +696,9 @@
       isVibrationEnabled = !isVibrationEnabled;
       localStorage.setItem('vibrationEnabled', isVibrationEnabled);
       updateVibeToggleButtonUI();
-      if (isVibrationEnabled) {
-        // Rövid teszt rezgés, amikor bekapcsolod
-        if ('vibrate' in navigator) navigator.vibrate(50);
-      }
+      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(50);
     };
 
-    // REZGÉST VEZÉRLŐ FÜGGVÉNYEK KAPCSOLÓVAL VÉDVE
     function triggerLocalVibrate() {
       if (isVibrationEnabled && 'vibrate' in navigator) {
         navigator.vibrate(80); 
@@ -701,6 +723,28 @@
       .catch(err => { console.error("Felhő hiba:", err); isLocalAction = false; });
     }
 
+    function handleRemoteData(remoteData) {
+      if (!remoteData) return;
+
+      if (!remoteData.categories || Object.keys(remoteData.categories).length === 0) {
+        customCategories = defaultCategories;
+        saveAllToCloud();
+      } else {
+        customCategories = remoteData.categories;
+      }
+
+      if (remoteData.lists) allLists = remoteData.lists;
+
+      if (!allLists[currentListName]) {
+        currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
+      }
+
+      syncIndicator.style.color = "#2ecc71";
+      updateCategoryDropdowns();
+      updateSelector();
+      renderList();
+    }
+
     function startCloudSync() {
       const targetUrl = `${FIREBASE_DB_URL}data.json`;
       const eventSource = new EventSource(targetUrl);
@@ -709,22 +753,23 @@
         try {
           const response = JSON.parse(event.data);
           if (response && response.data) {
-            const remoteData = response.data;
-            
-            if (!isLocalAction) {
-              triggerRemoteUpdateVibrate();
+            if (!isLocalAction) { 
+              triggerRemoteUpdateVibrate(); 
+              updateAppBadge(); // HÁTTÉRBEN NÖVELJÜK AZ IKON SZÁMLÁLÓT
             }
-
+            
             if (response.path === "/") {
-              if (remoteData.lists) allLists = remoteData.lists;
-              if (remoteData.categories) customCategories = remoteData.categories;
-            } else if (response.path === "/lists") { allLists = remoteData; }
-              else if (response.path === "/categories") { customCategories = remoteData; }
-            if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
+              handleRemoteData(response.data);
+            } else if (response.path === "/lists") {
+              allLists = response.data;
+              updateSelector();
+              renderList();
+            } else if (response.path === "/categories") {
+              customCategories = response.data || defaultCategories;
+              updateCategoryDropdowns();
+              renderList();
+            }
             syncIndicator.style.color = "#2ecc71";
-            updateCategoryDropdowns();
-            updateSelector();
-            renderList();
           }
         } catch (e) {}
       });
@@ -733,15 +778,11 @@
         try {
           const response = JSON.parse(event.data);
           if (response && response.data) {
-            const remoteData = response.data;
-            if (!isLocalAction) { triggerRemoteUpdateVibrate(); }
-            if (remoteData.lists) allLists = remoteData.lists;
-            if (remoteData.categories) customCategories = remoteData.categories;
-            if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
-            syncIndicator.style.color = "#2ecc71";
-            updateCategoryDropdowns();
-            updateSelector();
-            renderList();
+            if (!isLocalAction) { 
+              triggerRemoteUpdateVibrate(); 
+              updateAppBadge();
+            }
+            handleRemoteData(response.data);
           }
         } catch(err) {}
       };
@@ -749,12 +790,7 @@
       eventSource.onerror = function() {
         fetch(targetUrl).then(res => res.json()).then(remoteData => {
           if (remoteData) {
-            syncIndicator.style.color = "#2ecc71";
-            if (remoteData.lists) allLists = remoteData.lists;
-            if (remoteData.categories) customCategories = remoteData.categories;
-            updateCategoryDropdowns();
-            updateSelector();
-            renderList();
+            handleRemoteData(remoteData);
           }
         }).catch(() => { syncIndicator.style.color = "#e74c3c"; });
       };
@@ -783,7 +819,7 @@
       });
     }
 
-   function renderList() {
+    function renderList() {
       shoppingList.innerHTML = '';
       const items = allLists[currentListName] || [];
       if (items.length === 0) { shoppingList.innerHTML = '<div class="empty-state">Ez a lista még üres.</div>'; return; }
@@ -791,14 +827,12 @@
       const availableCategories = Object.keys(customCategories);
       const fallbackCategory = availableCategories[0] || 'Egyéb';
 
-      // VÉGIGMEGYÜNK A LISTÁN FORDÍTOTT SORRENDBEN (így a legújabb lesz az első)
+      // FORDÍTOTT IDŐREND: Legújabb tétel felülre
       for (let i = items.length - 1; i >= 0; i--) {
         const item = items[i];
         let cat = item.category || fallbackCategory;
         if (!customCategories[cat]) cat = fallbackCategory;
         if (!groupedItems[cat]) groupedItems[cat] = [];
-        
-        // Eltároljuk az eredeti indexet is a törléshez/pipáláshoz
         groupedItems[cat].push({ ...item, originalIndex: i });
       }
 
@@ -806,8 +840,6 @@
         const categoryGroup = groupedItems[categoryName];
         if (!categoryGroup || categoryGroup.length === 0) return;
         
-        // RENDEZÉS: A kategórián belül a még aktív (be nem pipált) tételek maradjanak felül,
-        // de mindkét csoporton belül (aktív és kész) megmarad az időrendi (új az első) sorrend.
         categoryGroup.sort((a, b) => a.checked - b.checked);
 
         const config = customCategories[categoryName];
@@ -880,7 +912,6 @@
       document.querySelectorAll('.delete-cat-btn').forEach(btn => {
         btn.onclick = () => {
           const catToDelete = btn.getAttribute('data-name'); const keys = Object.keys(customCategories); if (keys.length <= 1) return;
-          const fallback = keys.find(k => k !== catToDelete) || 'Egyéb';
           if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { 
             triggerLocalVibrate(); 
             delete customCategories[catToDelete]; 
@@ -920,40 +951,32 @@
       }
     }
 
-newListBtn.onclick = () => {
-  const name = prompt('Új lista neve:');
-  if (!name || name.trim() === '') return;
-  const trimmed = name.trim();
-  
-  if (allLists[trimmed]) return; // Ha már létezik ilyen nevű lista, nem csinálunk semmit
-  
-  triggerLocalVibrate();
-  
-  // 1. Létrehozzuk az új üres listát a memóriában
-  allLists[trimmed] = []; 
-  
-  // 2. AZONNAL átállítjuk az aktuális lista nevét az újra
-  currentListName = trimmed; 
-  
-  // 3. Elmentjük a választást a telefon helyi memóriájába is
-  localStorage.setItem('currentShoppingListName', currentListName);
-  
-  // 4. Frissítjük a legördülő menüt, hogy az új lista is benne legyen (és ki legyen jelölve)
-  updateSelector();
-  
-  // 5. Újrarajzoljuk a kijelzőt (ki fogja írni, hogy üres, de már az új listánál)
-  renderList();
-  
-  // 6. Elmentjük a felhőbe, hogy Brigi telefonján is azonnal megjelenjen az új lista
-  saveAllToCloud(); 
-};
+    newListBtn.onclick = () => { 
+      const name = prompt('Új lista neve:'); 
+      if (!name || name.trim() === '') return; 
+      const trimmed = name.trim(); 
+      if (allLists[trimmed]) return; 
+      
+      triggerLocalVibrate(); 
+      allLists[trimmed] = []; 
+      currentListName = trimmed; 
+      localStorage.setItem('currentShoppingListName', currentListName);
+      
+      updateSelector();
+      renderList();
+      saveAllToCloud(); 
+    };
+
+    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
 
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
 
-    // INICIALIZÁLÁS UTOLSÓ LÉPÉSEI
+    // INDÍTÁS
     updateVibeToggleButtonUI();
+    customCategories = defaultCategories;
     updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
+    clearAppBadge(); // INDULÁSKOR TÖRÖLJÜK A SZÁMOKAT
   </script>
 </body>
 </html>
