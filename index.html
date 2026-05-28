@@ -364,42 +364,42 @@
       line-height: 1;
     }
 
-    /* KATEGÓRIA KEZELŐ FORM SPREAD */
+    /* KATEGÓRIA KEZELŐ JAVÍTOTT, BEZÁRT ELRENDEZÉSE */
     .add-cat-form {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-      width: 100%;
-      align-items: center;
+      display: flex !important;
+      gap: 10px !important;
+      margin-bottom: 25px !important;
+      width: 100% !important;
+      align-items: center !important;
     }
     .add-cat-form #newCatIcon {
       width: 80px !important;
-      min-width: 80px;
+      min-width: 80px !important;
       padding: 15px !important;
       font-size: 26px !important;
-      text-align: center;
-      border: 3px solid #cbd5e1;
-      border-radius: 15px;
-      background-color: white;
-      color: #0f172a;
+      text-align: center !important;
+      border: 3px solid #cbd5e1 !important;
+      border-radius: 15px !important;
+      background-color: white !important;
+      color: #0f172a !important;
     }
     .add-cat-form #newCatName {
-      flex: 1;
+      flex: 1 !important;
       width: auto !important;
       padding: 15px !important;
       font-size: 26px !important;
-      border: 3px solid #cbd5e1;
-      border-radius: 15px;
-      background-color: white;
-      color: #0f172a;
+      border: 3px solid #cbd5e1 !important;
+      border-radius: 15px !important;
+      background-color: white !important;
+      color: #0f172a !important;
     }
     .add-cat-form #saveNewCatBtn {
       width: 65px !important;
-      min-width: 65px;
+      min-width: 65px !important;
       height: 65px !important;
       padding: 0 !important;
       font-size: 26px !important;
-      flex-shrink: 0;
+      flex-shrink: 0 !important;
     }
 
     #categoryManageList {
@@ -428,7 +428,7 @@
       cursor: pointer;
     }
 
-    /* TERMÉK SZERKESZTŐ STRUKTÚRA FIXALVA */
+    /* TERMÉK SZERKESZTŐ */
     .edit-form-container {
       display: flex;
       flex-direction: column;
@@ -611,18 +611,6 @@
     const newCatIcon = document.getElementById('newCatIcon');
     const newCatName = document.getElementById('newCatName');
     const saveNewCatBtn = document.getElementById('saveNewCatBtn');
-
-    const editItemModal = document.getElementById('editItemModal');
-    const closeEditModal = document.getElementById('closeEditModal');
-    const editItemName = document.getElementById('editItemName');
-    const editItemAmount = document.getElementById('editItemAmount');
-    const editItemUnit = document.getElementById('editItemUnit');
-    const editItemCategoryConfig = document.getElementById('editItemCategoryConfig');
-    const editItemImageInput = document.getElementById('editItemImageInput');
-    const editItemPhotoBtn = document.getElementById('editItemPhotoBtn');
-    const editImagePreview = document.getElementById('editImagePreview');
-    const removeEditImageBtn = document.getElementById('removeEditImageBtn');
-    const saveEditItemBtn = document.getElementById('saveEditItemBtn');
 
     let allLists = { 'Alapértelmezett': [] };
     let currentListName = localStorage.getItem('currentShoppingListName') || 'Alapértelmezett';
