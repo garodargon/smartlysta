@@ -911,8 +911,33 @@
       }
     }
 
-    newListBtn.onclick = () => { const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; triggerLocalVibrate(); allLists[trimmed] = []; currentListName = trimmed; saveAllToCloud(); };
-    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
+newListBtn.onclick = () => {
+  const name = prompt('Új lista neve:');
+  if (!name || name.trim() === '') return;
+  const trimmed = name.trim();
+  
+  if (allLists[trimmed]) return; // Ha már létezik ilyen nevű lista, nem csinálunk semmit
+  
+  triggerLocalVibrate();
+  
+  // 1. Létrehozzuk az új üres listát a memóriában
+  allLists[trimmed] = []; 
+  
+  // 2. AZONNAL átállítjuk az aktuális lista nevét az újra
+  currentListName = trimmed; 
+  
+  // 3. Elmentjük a választást a telefon helyi memóriájába is
+  localStorage.setItem('currentShoppingListName', currentListName);
+  
+  // 4. Frissítjük a legördülő menüt, hogy az új lista is benne legyen (és ki legyen jelölve)
+  updateSelector();
+  
+  // 5. Újrarajzoljuk a kijelzőt (ki fogja írni, hogy üres, de már az új listánál)
+  renderList();
+  
+  // 6. Elmentjük a felhőbe, hogy Brigi telefonján is azonnal megjelenjen az új lista
+  saveAllToCloud(); 
+};
 
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
