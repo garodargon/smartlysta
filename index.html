@@ -9,6 +9,7 @@
   
   <style>
     * {
+      box-shrink: 0;
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -28,7 +29,6 @@
       width: 100%;
       max-width: 600px;
       background: none;
-      position: relative;
     }
 
     header h1 {
@@ -43,31 +43,7 @@
       gap: 15px;
     }
 
-    /* BEÚSZÓ ÉRTESÍTÉSI SÁV */
-    .app-notification {
-      position: fixed;
-      top: -100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 500px;
-      background-color: #2563eb;
-      color: white;
-      padding: 20px 25px;
-      border-radius: 20px;
-      font-size: 28px;
-      font-weight: bold;
-      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      z-index: 99999;
-      transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .app-notification.show {
-      top: 20px;
-    }
-
+    /* LISTAVÁLASZTÓ ÓRIÁS MEZŐ */
     .list-selector-area {
       display: flex;
       gap: 15px;
@@ -85,6 +61,7 @@
       color: #0f172a;
     }
 
+    /* ÓRIÁS BEVITELI MEZŐK */
     .input-area-container {
       background: white;
       padding: 25px;
@@ -206,6 +183,7 @@
       cursor: pointer;
     }
 
+    /* KATEGÓRIA KÁRTYÁK ÉS LISTAELEMEK */
     .category-card {
       background: white;
       border-radius: 30px;
@@ -254,17 +232,9 @@
       color: #10b981;
     }
 
-    .list-item.checked {
-      opacity: 0.5;
-    }
-    .list-item.checked .checkbox {
-      background: #e2e8f0;
-      border-color: #cbd5e1;
-    }
-    .list-item.checked .item-text {
-      text-decoration: line-through;
-      color: #64748b;
-    }
+    .list-item.checked { opacity: 0.5; }
+    .list-item.checked .checkbox { background: #e2e8f0; border-color: #cbd5e1; }
+    .list-item.checked .item-text { text-decoration: line-through; color: #64748b; }
 
     .item-text-container {
       flex: 1;
@@ -336,6 +306,7 @@
       cursor: pointer;
     }
 
+    /* MODAL ABLAKOK ALAP STÍLUSAI */
     .modal {
       display: none;
       position: fixed;
@@ -432,7 +403,7 @@
       flex-direction: column;
       gap: 20px;
     }
-    .edit-form-container input {
+    .edit-form-container input, .edit-form-container select {
       padding: 25px;
       font-size: 32px;
       font-weight: bold;
@@ -446,81 +417,30 @@
 
     /* SÖTÉT MÓD AUTOMATIKUS BEÁLLÍTÁSA */
     @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #0f172a;
-        color: #f8fafc;
-      }
-      header h1 {
-        color: #f8fafc;
-      }
+      body { background-color: #0f172a; color: #f8fafc; }
+      header h1 { color: #f8fafc; }
       #listSelect, #itemInput, #amountInput, #unitSelect, #categorySelect, #editItemName, #editItemAmount, #editItemUnit, #editItemCategoryConfig {
-        background-color: #1e293b;
-        color: #f8fafc;
-        border-color: #334155;
+        background-color: #1e293b; color: #f8fafc; border-color: #334155;
       }
-      #listSelect:focus, #itemInput:focus {
-        border-color: #3b82f6;
-      }
-      .input-area-container, .category-card, .modal-card {
-        background-color: #1e293b;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      }
-      .category-title {
-        color: #cbd5e1;
-        border-bottom-color: #334155;
-      }
-      .list-item {
-        background-color: #334155;
-        border-color: #475569;
-      }
-      .item-text {
-        color: #f8fafc;
-      }
-      .list-item.checked .item-text {
-        color: #94a3b8;
-      }
-      .checkbox {
-        background-color: #1e293b;
-        border-color: #475569;
-      }
-      .list-item.checked .checkbox {
-        background-color: #475569;
-        border-color: #64748b;
-      }
-      .unit-badge {
-        background-color: #475569;
-        color: #cbd5e1;
-      }
-      .edit-btn {
-        background-color: #475569;
-        color: #cbd5e1;
-      }
-      .secondary-btn {
-        background-color: #334155;
-        color: #f8fafc;
-      }
-      .manage-cat-item {
-        background-color: #334155;
-      }
-      .add-cat-form input {
-        background-color: #1e293b;
-        color: #f8fafc;
-        border-color: #334155;
-      }
-      .app-notification {
-        background-color: #3b82f6;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-      }
+      #listSelect:focus, #itemInput:focus { border-color: #3b82f6; }
+      .input-area-container, .category-card, .modal-card { background-color: #1e293b; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+      .modal-card h2 { color: #f8fafc; }
+      .category-title { color: #cbd5e1; border-bottom-color: #334155; }
+      .list-item { background-color: #334155; border-color: #475569; }
+      .item-text { color: #f8fafc; }
+      .list-item.checked .item-text { color: #94a3b8; }
+      .checkbox { background-color: #1e293b; border-color: #475569; }
+      .list-item.checked .checkbox { background-color: #475569; border-color: #64748b; }
+      .unit-badge, .edit-btn { background-color: #475569; color: #cbd5e1; }
+      .secondary-btn { background-color: #334155; color: #f8fafc; }
+      .manage-cat-item { background-color: #334155; color: #f8fafc; }
+      .add-cat-form input { background-color: #1e293b; color: #f8fafc; border-color: #334155; }
     }
   </style>
 </head>
 <body>
 
   <div class="app-container">
-    <div id="appNotification" class="app-notification">
-      <i class="fas fa-bell"></i> <span id="notificationText">A lista frissült!</span>
-    </div>
-
     <header>
       <h1>🛒 Smartysta <span id="syncIndicator" style="font-size: 32px; color: #e74c3c;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span></h1>
     </header>
@@ -640,8 +560,6 @@
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const removeImageBtn = document.getElementById('removeImageBtn');
     const syncIndicator = document.getElementById('syncIndicator');
-    const appNotification = document.getElementById('appNotification');
-    const notificationText = document.getElementById('notificationText');
 
     const imgModal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
@@ -671,6 +589,82 @@
     let currentBase64Image = "";
     let editingItemIndex = null;
     let editingBase64Image = "";
-    
-    // AZ UTOLSÓ MENTETT ADAT ÁLLAPOTA (Ehhez hasonlítjuk az újat, hogy lássuk, jött-e távoli változás)
-    let lastKnownDataString = "";
+
+    const defaultCategories = {
+      'Pékáru': { icon: '🍞' },
+      'Tejtermék': { icon: '🥛' },
+      'Zöldség-Gyümölcs': { icon: '🍎' },
+      'Húsáru': { icon: '🥩' },
+      'Szárazáru': { icon: '🍝' },
+      'Vegyszer': { icon: '🧼' },
+      'Háztartás': { icon: '🧻' },
+      'Egyéb': { icon: '❓' }
+    };
+    let customCategories = defaultCategories;
+
+    function saveAllToCloud() {
+      localStorage.setItem('currentShoppingListName', currentListName);
+      fetch(`${FIREBASE_DB_URL}data.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lists: allLists, categories: customCategories })
+      }).catch(err => console.error("Felhő hiba:", err));
+    }
+
+    function startCloudSync() {
+      const targetUrl = `${FIREBASE_DB_URL}data.json`;
+      const eventSource = new EventSource(targetUrl);
+
+      eventSource.addEventListener('put', function(event) {
+        try {
+          const response = JSON.parse(event.data);
+          if (response && response.data) {
+            const remoteData = response.data;
+            if (response.path === "/") {
+              if (remoteData.lists) allLists = remoteData.lists;
+              if (remoteData.categories) customCategories = remoteData.categories;
+            } else if (response.path === "/lists") { allLists = remoteData; }
+              else if (response.path === "/categories") { customCategories = remoteData; }
+            if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
+            syncIndicator.style.color = "#2ecc71";
+            updateCategoryDropdowns();
+            updateSelector();
+            renderList();
+          }
+        } catch (e) {}
+      });
+
+      eventSource.onmessage = function(event) {
+        try {
+          const response = JSON.parse(event.data);
+          if (response && response.data) {
+            const remoteData = response.data;
+            if (remoteData.lists) allLists = remoteData.lists;
+            if (remoteData.categories) customCategories = remoteData.categories;
+            if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
+            syncIndicator.style.color = "#2ecc71";
+            updateCategoryDropdowns();
+            updateSelector();
+            renderList();
+          }
+        } catch(err) {}
+      };
+
+      eventSource.onerror = function() {
+        fetch(targetUrl).then(res => res.json()).then(remoteData => {
+          if (remoteData) {
+            syncIndicator.style.color = "#2ecc71";
+            if (remoteData.lists) allLists = remoteData.lists;
+            if (remoteData.categories) customCategories = remoteData.categories;
+            updateCategoryDropdowns();
+            updateSelector();
+            renderList();
+          }
+        }).catch(() => { syncIndicator.style.color = "#e74c3c"; });
+      };
+    }
+
+    function updateCategoryDropdowns() {
+      categorySelect.innerHTML = '';
+      editItemCategoryConfig.innerHTML = '';
+      Object.keys(customCategories).forEach(
