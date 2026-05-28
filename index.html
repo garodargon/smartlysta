@@ -544,7 +544,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <script>
-    const FIREBASE_DB_URL = "https://smartysta-default-rtdb.europe-west1.firebasedatabase.app/";
+    const FIREBASE_DB_URL = "https://smartlysta-default-rtdb.europe-west1.firebasedatabase.app/";
 
     const itemInput = document.getElementById('itemInput');
     const amountInput = document.getElementById('amountInput');
@@ -667,4 +667,140 @@
     function updateCategoryDropdowns() {
       categorySelect.innerHTML = '';
       editItemCategoryConfig.innerHTML = '';
-      Object.keys(customCategories).forEach(
+      Object.keys(customCategories).forEach(catName => {
+        const text = `${customCategories[catName].icon} ${catName}`;
+        const option1 = document.createElement('option'); option1.value = catName; option1.textContent = text;
+        categorySelect.appendChild(option1);
+        const option2 = document.createElement('option'); option2.value = catName; option2.textContent = text;
+        editItemCategoryConfig.appendChild(option2);
+      });
+    }
+
+    function updateSelector() {
+      listSelect.innerHTML = '';
+      Object.keys(allLists).forEach(name => {
+        const option = document.createElement('option'); option.value = name;
+        const activeCount = allLists[name] ? allLists[name].filter(item => !item.checked).length : 0;
+        option.textContent = name + ` (${activeCount})`;
+        if (name === currentListName) option.selected = true;
+        listSelect.appendChild(option);
+      });
+    }
+
+    function renderList() {
+      shoppingList.innerHTML = '';
+      const items = allLists[currentListName] || [];
+      if (items.length === 0) { shoppingList.innerHTML = '<div class="empty-state">Ez a lista még üres.</div>'; return; }
+      const groupedItems = {};
+      const availableCategories = Object.keys(customCategories);
+      const fallbackCategory = availableCategories[0] || 'Egyéb';
+
+      items.forEach((item, originalIndex) => {
+        let cat = item.category || fallbackCategory;
+        if (!customCategories[cat]) cat = fallbackCategory;
+        if (!groupedItems[cat]) groupedItems[cat] = [];
+        groupedItems[cat].push({ ...item, originalIndex });
+      });
+
+      availableCategories.forEach(categoryName => {
+        const categoryGroup = groupedItems[categoryName];
+        if (!categoryGroup || categoryGroup.length === 0) return;
+        const config = customCategories[categoryName];
+        const cardDiv = document.createElement('div'); cardDiv.className = 'category-card';
+        cardDiv.innerHTML = `<div class="category-title">${config.icon} ${categoryName}</div>`;
+        const listContainer = document.createElement('div'); listContainer.className = 'item-list-container';
+
+        categoryGroup.forEach(item => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = `list-item ${item.checked ? 'checked' : ''}`;
+          const imgHtml = item.image ? `<img src="${item.image}" class="item-img">` : '';
+          itemDiv.innerHTML = `
+            <div class="checkbox">${item.checked ? '<i class="fas fa-check"></i>' : ''}</div>
+            <div class="item-text-container"><span class="item-text">${item.name}</span><span class="unit-badge">${item.amount} ${item.unit}</span></div>
+            ${imgHtml}
+            <div class="item-actions">
+              <button class="edit-btn"><i class="fas fa-pencil-alt"></i></button>
+              <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            </div>
+          `;
+          itemDiv.querySelectorAll('.checkbox, .item-text-container').forEach(el => {
+            el.onclick = () => { allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; saveAllToCloud(); };
+          });
+          if (item.image) { itemDiv.querySelector('.item-img').onclick = () => { imgModal.style.display = "block"; modalImg.src = item.image; }; }
+          itemDiv.querySelector('.delete-btn').onclick = () => { allLists[currentListName].splice(item.originalIndex, 1); saveAllToCloud(); };
+          itemDiv.querySelector('.edit-btn').onclick = () => { openEditModalWindow(item.originalIndex); };
+          listContainer.appendChild(itemDiv);
+        });
+        cardDiv.appendChild(listContainer); shoppingList.appendChild(cardDiv);
+      });
+    }
+
+    function openEditModalWindow(index) {
+      editingItemIndex = index; const item = allLists[currentListName][index];
+      editItemName.value = item.name; editItemAmount.value = item.amount; editItemUnit.value = item.unit;
+      editItemCategoryConfig.value = item.category || Object.keys(customCategories)[0] || 'Egyéb';
+      editingBase64Image = item.image || "";
+      editImagePreview.style.display = editingBase64Image ? 'flex' : 'none';
+      editItemModal.style.display = "block";
+    }
+
+    saveEditItemBtn.onclick = () => {
+      if (editingItemIndex === null) return; const name = editItemName.value.trim(); if (name === "") return;
+      allLists[currentListName][editingItemIndex] = { name, amount: editItemAmount.value || "1", unit: editItemUnit.value, category: editItemCategoryConfig.value, image: editingBase64Image, checked: allLists[currentListName][editingItemIndex].checked };
+      saveAllToCloud(); editItemModal.style.display = "none"; editingItemIndex = null;
+    };
+
+    editItemPhotoBtn.onclick = () => editItemImageInput.click();
+    editItemImageInput.onchange = function() {
+      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { editingBase64Image = e.target.result; editImagePreview.style.display = 'flex'; }; reader.readAsDataURL(file); }
+    };
+    removeEditImageBtn.onclick = () => { editingBase64Image = ""; editItemImageInput.value = ""; editImagePreview.style.display = 'none'; };
+
+    function renderManageCategoryList() {
+      categoryManageList.innerHTML = '';
+      Object.keys(customCategories).forEach(catName => {
+        const item = customCategories[catName]; const itemDiv = document.createElement('div'); itemDiv.className = 'manage-cat-item';
+        itemDiv.innerHTML = `<span>${item.icon} ${catName}</span><button class="delete-cat-btn" data-name="${catName}"><i class="fas fa-minus-circle"></i></button>`;
+        categoryManageList.appendChild(itemDiv);
+      });
+      document.querySelectorAll('.delete-cat-btn').forEach(btn => {
+        btn.onclick = () => {
+          const catToDelete = btn.getAttribute('data-name'); const keys = Object.keys(customCategories); if (keys.length <= 1) return;
+          const fallback = keys.find(k => k !== catToDelete) || 'Egyéb';
+          if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { delete customCategories[catToDelete]; saveAllToCloud(); renderManageCategoryList(); }
+        };
+      });
+    }
+
+    saveNewCatBtn.onclick = () => {
+      const name = newCatName.value.trim(); const icon = newCatIcon.value.trim() || '📦'; if (name === '' || customCategories[name]) return;
+      customCategories[name] = { icon }; newCatName.value = ''; newCatIcon.value = ''; saveAllToCloud(); renderManageCategoryList();
+    };
+
+    manageCatsBtn.onclick = () => { catModal.style.display = "block"; renderManageCategoryList(); };
+    closeCatModal.onclick = () => catModal.style.display = "none";
+    closeImgModal.onclick = () => imgModal.style.display = "none";
+    closeEditModal.onclick = () => editItemModal.style.display = "none";
+    window.onclick = e => { if (e.target === imgModal) imgModal.style.display = "none"; if (e.target === catModal) catModal.style.display = "none"; if (e.target === editItemModal) editItemModal.style.display = "none"; };
+
+    photoBtn.onclick = () => imageInput.click();
+    imageInput.onchange = function() {
+      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { currentBase64Image = e.target.result; photoBtn.classList.add('has-image'); imagePreviewContainer.style.display = 'flex'; }; reader.readAsDataURL(file); }
+    };
+    removeImageBtn.onclick = () => { currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; };
+
+    function addItem() {
+      const name = itemInput.value.trim(); const amount = amountInput.value.trim() || "1"; const unit = unitSelect.value; const category = categorySelect.value || Object.keys(customCategories)[0] || 'Egyéb';
+      if (name !== '') { if (!allLists[currentListName]) allLists[currentListName] = []; allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; saveAllToCloud(); itemInput.focus(); }
+    }
+
+    newListBtn.onclick = () => { const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; allLists[trimmed] = []; currentListName = trimmed; saveAllToCloud(); };
+    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
+
+    addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
+    listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
+
+    updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
+  </script>
+</body>
+</html>
