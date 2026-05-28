@@ -423,6 +423,71 @@
       display: flex;
       gap: 15px;
     }
+        /* SÖTÉT MÓD AUTOMATIKUS BEÁLLÍTÁSA */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #0f172a;
+        color: #f8fafc;
+      }
+      header h1 {
+        color: #f8fafc;
+      }
+      #listSelect, #itemInput, #amountInput, #unitSelect, #categorySelect, #editItemName, #editItemAmount, #editItemUnit, #editItemCategoryConfig {
+        background-color: #1e293b;
+        color: #f8fafc;
+        border-color: #334155;
+      }
+      #listSelect:focus, #itemInput:focus {
+        border-color: #3b82f6;
+      }
+      .input-area-container, .category-card, .modal-card {
+        background-color: #1e293b;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      }
+      .category-title {
+        color: #cbd5e1;
+        border-bottom-color: #334155;
+      }
+      .list-item {
+        background-color: #334155;
+        border-color: #475569;
+      }
+      .item-text {
+        color: #f8fafc;
+      }
+      .list-item.checked .item-text {
+        color: #94a3b8;
+      }
+      .checkbox {
+        background-color: #1e293b;
+        border-color: #475569;
+      }
+      .list-item.checked .checkbox {
+        background-color: #475569;
+        border-color: #64748b;
+      }
+      .unit-badge {
+        background-color: #475569;
+        color: #cbd5e1;
+      }
+      .edit-btn {
+        background-color: #475569;
+        color: #cbd5e1;
+      }
+      .secondary-btn {
+        background-color: #334155;
+        color: #f8fafc;
+      }
+      .manage-cat-item {
+        background-color: #334155;
+      }
+      .add-cat-form input {
+        background-color: #1e293b;
+        color: #f8fafc;
+        border-color: #334155;
+      }
+    }
+
   </style>
 </head>
 <body>
