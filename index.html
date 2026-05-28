@@ -42,6 +42,22 @@
       gap: 15px;
     }
 
+    /* REZGÉS KAPCSOLÓ GOMB */
+    .vibe-toggle-btn {
+      background: none;
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+      color: #3b82f6;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+    .vibe-toggle-btn.muted {
+      color: #94a3b8;
+    }
+
     /* LISTAVÁLASZTÓ ÓRIÁS MEZŐ */
     .list-selector-area {
       display: flex;
@@ -482,7 +498,11 @@
 
   <div class="app-container">
     <header>
-      <h1>🛒 Smartysta <span id="syncIndicator" style="font-size: 32px; color: #e74c3c;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span></h1>
+      <h1>
+        🛒 Smartysta 
+        <span id="syncIndicator" style="font-size: 32px; color: #e74c3c;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span>
+        <button id="vibeToggleBtn" class="vibe-toggle-btn" title="Rezgések ki/be"><i class="fas fa-volume-up"></i></button>
+      </h1>
     </header>
 
     <div class="list-selector-area">
@@ -600,6 +620,7 @@
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const removeImageBtn = document.getElementById('removeImageBtn');
     const syncIndicator = document.getElementById('syncIndicator');
+    const vibeToggleBtn = document.getElementById('vibeToggleBtn');
 
     const imgModal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
@@ -617,6 +638,10 @@
     let currentBase64Image = "";
     let editingItemIndex = null;
     let editingBase64Image = "";
+    let isLocalAction = false; 
+
+    // REZGÉS GLOBÁLIS BEÁLLÍTÁSA (alapértelmezett: true, azaz be van kapcsolva)
+    let isVibrationEnabled = localStorage.getItem('vibrationEnabled') !== 'false';
 
     const defaultCategories = {
       'Pékáru': { icon: '🍞' },
@@ -630,13 +655,50 @@
     };
     let customCategories = defaultCategories;
 
+    // KAPCSOLÓ INTERFÉSZ FRISSÍTÉSE
+    function updateVibeToggleButtonUI() {
+      if (isVibrationEnabled) {
+        vibeToggleBtn.classList.remove('muted');
+        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      } else {
+        vibeToggleBtn.classList.add('muted');
+        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      }
+    }
+
+    vibeToggleBtn.onclick = () => {
+      isVibrationEnabled = !isVibrationEnabled;
+      localStorage.setItem('vibrationEnabled', isVibrationEnabled);
+      updateVibeToggleButtonUI();
+      if (isVibrationEnabled) {
+        // Rövid teszt rezgés, amikor bekapcsolod
+        if ('vibrate' in navigator) navigator.vibrate(50);
+      }
+    };
+
+    // REZGÉST VEZÉRLŐ FÜGGVÉNYEK KAPCSOLÓVAL VÉDVE
+    function triggerLocalVibrate() {
+      if (isVibrationEnabled && 'vibrate' in navigator) {
+        navigator.vibrate(80); 
+      }
+    }
+
+    function triggerRemoteUpdateVibrate() {
+      if (isVibrationEnabled && 'vibrate' in navigator) {
+        navigator.vibrate([100, 100, 100]); 
+      }
+    }
+
     function saveAllToCloud() {
+      isLocalAction = true; 
       localStorage.setItem('currentShoppingListName', currentListName);
       fetch(`${FIREBASE_DB_URL}data.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ lists: allLists, categories: customCategories })
-      }).catch(err => console.error("Felhő hiba:", err));
+      })
+      .then(() => { isLocalAction = false; })
+      .catch(err => { console.error("Felhő hiba:", err); isLocalAction = false; });
     }
 
     function startCloudSync() {
@@ -648,6 +710,11 @@
           const response = JSON.parse(event.data);
           if (response && response.data) {
             const remoteData = response.data;
+            
+            if (!isLocalAction) {
+              triggerRemoteUpdateVibrate();
+            }
+
             if (response.path === "/") {
               if (remoteData.lists) allLists = remoteData.lists;
               if (remoteData.categories) customCategories = remoteData.categories;
@@ -667,6 +734,7 @@
           const response = JSON.parse(event.data);
           if (response && response.data) {
             const remoteData = response.data;
+            if (!isLocalAction) { triggerRemoteUpdateVibrate(); }
             if (remoteData.lists) allLists = remoteData.lists;
             if (remoteData.categories) customCategories = remoteData.categories;
             if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
@@ -752,10 +820,18 @@
             </div>
           `;
           itemDiv.querySelectorAll('.checkbox, .item-text-container').forEach(el => {
-            el.onclick = () => { allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; saveAllToCloud(); };
+            el.onclick = () => { 
+              triggerLocalVibrate(); 
+              allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; 
+              saveAllToCloud(); 
+            };
           });
           if (item.image) { itemDiv.querySelector('.item-img').onclick = () => { imgModal.style.display = "block"; modalImg.src = item.image; }; }
-          itemDiv.querySelector('.delete-btn').onclick = () => { allLists[currentListName].splice(item.originalIndex, 1); saveAllToCloud(); };
+          itemDiv.querySelector('.delete-btn').onclick = () => { 
+            triggerLocalVibrate(); 
+            allLists[currentListName].splice(item.originalIndex, 1); 
+            saveAllToCloud(); 
+          };
           itemDiv.querySelector('.edit-btn').onclick = () => { openEditModalWindow(item.originalIndex); };
           listContainer.appendChild(itemDiv);
         });
@@ -774,6 +850,7 @@
 
     saveEditItemBtn.onclick = () => {
       if (editingItemIndex === null) return; const name = editItemName.value.trim(); if (name === "") return;
+      triggerLocalVibrate();
       allLists[currentListName][editingItemIndex] = { name, amount: editItemAmount.value || "1", unit: editItemUnit.value, category: editItemCategoryConfig.value, image: editingBase64Image, checked: allLists[currentListName][editingItemIndex].checked };
       saveAllToCloud(); editItemModal.style.display = "none"; editingItemIndex = null;
     };
@@ -795,13 +872,19 @@
         btn.onclick = () => {
           const catToDelete = btn.getAttribute('data-name'); const keys = Object.keys(customCategories); if (keys.length <= 1) return;
           const fallback = keys.find(k => k !== catToDelete) || 'Egyéb';
-          if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { delete customCategories[catToDelete]; saveAllToCloud(); renderManageCategoryList(); }
+          if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { 
+            triggerLocalVibrate(); 
+            delete customCategories[catToDelete]; 
+            saveAllToCloud(); 
+            renderManageCategoryList(); 
+          }
         };
       });
     }
 
     saveNewCatBtn.onclick = () => {
       const name = newCatName.value.trim(); const icon = newCatIcon.value.trim() || '📦'; if (name === '' || customCategories[name]) return;
+      triggerLocalVibrate();
       customCategories[name] = { icon }; newCatName.value = ''; newCatIcon.value = ''; saveAllToCloud(); renderManageCategoryList();
     };
 
@@ -819,15 +902,23 @@
 
     function addItem() {
       const name = itemInput.value.trim(); const amount = amountInput.value.trim() || "1"; const unit = unitSelect.value; const category = categorySelect.value || Object.keys(customCategories)[0] || 'Egyéb';
-      if (name !== '') { if (!allLists[currentListName]) allLists[currentListName] = []; allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; saveAllToCloud(); itemInput.focus(); }
+      if (name !== '') { 
+        triggerLocalVibrate();
+        if (!allLists[currentListName]) allLists[currentListName] = []; 
+        allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); 
+        itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; 
+        saveAllToCloud(); itemInput.focus(); 
+      }
     }
 
-    newListBtn.onclick = () => { const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; allLists[trimmed] = []; currentListName = trimmed; saveAllToCloud(); };
-    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
+    newListBtn.onclick = () => { const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; triggerLocalVibrate(); allLists[trimmed] = []; currentListName = trimmed; saveAllToCloud(); };
+    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
 
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
 
+    // INICIALIZÁLÁS UTOLSÓ LÉPÉSEI
+    updateVibeToggleButtonUI();
     updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
   </script>
 </body>
