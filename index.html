@@ -509,7 +509,7 @@
     <div class="list-selector-area">
       <select id="listSelect"></select>
       <button class="icon-btn add" id="newListBtn" title="Új lista"><i class="fas fa-folder-plus"></i></button>
-      <button class="icon-btn delete" id="deleteListBtn" title="Törlés"><i class="fas fa-trash-alt"></i></button>
+      <button class="icon-btn delete" id="deleteListBtn" title="Torsles"><i class="fas fa-trash-alt"></i></button>
     </div>
 
     <div class="input-area-container">
@@ -659,7 +659,7 @@
     };
     let customCategories = {};
 
-    // FIGYELJÜK, HOGY NYITVA VAN-E AZ APP (HA IGEN, NULLÁZZUK A BADGE-ET)
+    // FIGYELJÜK A FÓKUSZT
     window.addEventListener('focus', () => {
       isAppFocused = true;
       clearAppBadge();
@@ -669,16 +669,17 @@
     });
 
     function updateAppBadge() {
+      // Csak akkor növeljük és küldjük, ha nem nézzük épp az appot
       if (!isAppFocused && 'setAppBadge' in navigator) {
         badgeCount++;
-        navigator.setAppBadge(badgeCount).catch(err => console.log(err));
+        navigator.setAppBadge(badgeCount).catch(err => console.log("Badge hiba:", err));
       }
     }
 
     function clearAppBadge() {
       badgeCount = 0;
       if ('clearAppBadge' in navigator) {
-        navigator.clearAppBadge().catch(err => console.log(err));
+        navigator.clearAppBadge().catch(err => console.log("Badge törlés hiba:", err));
       }
     }
 
@@ -755,7 +756,7 @@
           if (response && response.data) {
             if (!isLocalAction) { 
               triggerRemoteUpdateVibrate(); 
-              updateAppBadge(); // HÁTTÉRBEN NÖVELJÜK AZ IKON SZÁMLÁLÓT
+              updateAppBadge(); // ÉRTESÍTÉSI PÖTTY KIKÜLDÉSE
             }
             
             if (response.path === "/") {
@@ -827,7 +828,6 @@
       const availableCategories = Object.keys(customCategories);
       const fallbackCategory = availableCategories[0] || 'Egyéb';
 
-      // FORDÍTOTT IDŐREND: Legújabb tétel felülre
       for (let i = items.length - 1; i >= 0; i--) {
         const item = items[i];
         let cat = item.category || fallbackCategory;
@@ -972,11 +972,19 @@
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
 
-    // INDÍTÁS
+    // INDÍTÁS ÉS HÁTTÉRMUNKÁS (SERVICE WORKER) REGISZTRÁCIÓ
     updateVibeToggleButtonUI();
     customCategories = defaultCategories;
     updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
-    clearAppBadge(); // INDULÁSKOR TÖRÖLJÜK A SZÁMOKAT
+    clearAppBadge();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker kész!', reg.scope))
+          .catch(err => console.error('Service Worker hiba:', err));
+      });
+    }
   </script>
 </body>
 </html>
