@@ -409,11 +409,14 @@
       font-weight: bold;
       border: 4px solid #cbd5e1;
       border-radius: 20px;
-    }
-    .edit-amount-row {
-      display: flex;
-      gap: 15px;
-    }
+  .edit-amount-row {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.edit-amount-row input, .edit-amount-row select {
+  width: 100% !important;
+}
 
     /* SÖTÉT MÓD AUTOMATIKUS BEÁLLÍTÁSA */
     @media (prefers-color-scheme: dark) {
