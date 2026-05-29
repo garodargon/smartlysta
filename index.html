@@ -21,7 +21,7 @@
       background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
       background-attachment: fixed;
       color: #f8fafc;
-      padding: 15px;
+      padding: 8px; /* Kisebb padding, hogy közelebb tolódjon a szélhez */
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -29,7 +29,7 @@
 
     .app-container {
       width: 100%;
-      max-width: 600px;
+      max-width: 700px; /* Megnövelt szélesség a nagyobb kijelzőkhöz */
       background: none;
     }
 
@@ -46,7 +46,6 @@
       text-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    /* REZGÉS KAPCSOLÓ GOMB */
     .vibe-toggle-btn {
       background: none;
       border: none;
@@ -59,15 +58,14 @@
       transition: color 0.2s, transform 0.1s;
     }
     .vibe-toggle-btn:active { transform: scale(0.9); }
-    .vibe-toggle-btn.muted {
-      color: rgba(255, 255, 255, 0.4);
-    }
+    .vibe-toggle-btn.muted { color: rgba(255, 255, 255, 0.4); }
 
-    /* LISTAVÁLASZTÓ MEZŐ */
+    /* EGYSÉGESÍTETT KIJELZŐ SZÉLÉIG TOLT BUBORÉKOK */
     .list-selector-area {
       display: flex;
-      gap: 15px;
+      gap: 12px;
       margin-bottom: 25px;
+      padding: 0 4px;
     }
 
     #listSelect {
@@ -82,12 +80,8 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
-    #listSelect option {
-      background-color: #115e59;
-      color: #ffffff;
-    }
+    #listSelect option { background-color: #115e59; color: #ffffff; }
 
-    /* MODERN BEVITELI MEZŐK */
     .input-area-container {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(15px);
@@ -97,6 +91,8 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 15px 35px rgba(0,0,0,0.1);
       margin-bottom: 30px;
+      margin-left: 4px;
+      margin-right: 4px;
     }
 
     #itemInput {
@@ -110,9 +106,7 @@
       color: #ffffff;
       background-color: rgba(255, 255, 255, 0.1);
     }
-    #itemInput::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
+    #itemInput::placeholder { color: rgba(255, 255, 255, 0.6); }
 
     #itemInput:focus, #listSelect:focus, #amountInput:focus, #unitSelect:focus, #categorySelect:focus {
       border-color: #2dd4bf;
@@ -126,11 +120,7 @@
       gap: 20px;
       margin-bottom: 20px;
     }
-
-    .amount-area-large {
-      display: flex;
-      gap: 15px;
-    }
+    .amount-area-large { display: flex; gap: 15px; }
 
     #amountInput {
       width: 130px;
@@ -154,15 +144,9 @@
       background-color: rgba(255, 255, 255, 0.1);
       color: #ffffff;
     }
-    #unitSelect option, #categorySelect option {
-      background-color: #115e59;
-      color: #ffffff;
-    }
+    #unitSelect option, #categorySelect option { background-color: #115e59; color: #ffffff; }
 
-    .actions-row {
-      display: flex;
-      gap: 15px;
-    }
+    .actions-row { display: flex; gap: 15px; }
 
     .icon-btn {
       padding: 22px;
@@ -176,7 +160,6 @@
       transition: background 0.2s, transform 0.1s;
     }
     .icon-btn:active, .add-btn:active, .secondary-btn:active { transform: scale(0.96); }
-
     .icon-btn.add { background-color: #10b981; color: white; }
     .icon-btn.delete { background-color: #ef4444; color: white; }
     
@@ -188,10 +171,7 @@
       font-weight: bold;
       gap: 10px;
     }
-    .photo-btn.has-image {
-      background-color: #06b6d4;
-      border-color: #2dd4bf;
-    }
+    .photo-btn.has-image { background-color: #06b6d4; border-color: #2dd4bf; }
 
     .add-btn {
       flex: 1.5;
@@ -221,24 +201,23 @@
       font-size: 28px;
       font-weight: bold;
       color: #2dd4bf;
+      margin-left: 4px;
+      margin-right: 4px;
     }
-    #removeImageBtn {
-      background: none;
-      border: none;
-      font-size: 36px;
-      cursor: pointer;
-    }
+    #removeImageBtn { background: none; border: none; font-size: 36px; cursor: pointer; }
 
-    /* LEHALVÁNYÍTOTT, ÁTTETSZŐ KATEGÓRIA KÁRTYÁK */
+    /* EGYSÉGESÍTETT, MAXIMÁLISAN KIJELZŐ SZÉLÉIG ÉRŐ KÁRTYÁK MŰANYAGOS SÖTÉTKÉK HELYETT TÜRKIZZEL */
     .category-card {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 32px;
-      padding: 25px;
-      margin-bottom: 30px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 28px;
+      padding: 22px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      margin-left: 4px;  /* Kitolva szinte teljesen a széléig */
+      margin-right: 4px; /* Kitolva szinte teljesen a széléig */
     }
 
     .category-title {
@@ -246,8 +225,8 @@
       font-weight: 800;
       padding-bottom: 15px;
       margin-bottom: 20px;
-      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 0.85);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
     }
 
     .item-list-container {
@@ -256,35 +235,36 @@
       gap: 15px;
     }
 
-    /* TISZTA FEHÉR LISTAELEMEK SÖTÉT SZÖVEGGEL */
+    /* SZINTÉN TÜRKIZ ALAPÚ TERMÉKBUBORÉKOK AZ EGYSÉGES KINÉZETÉRT */
     .list-item {
       display: flex;
       align-items: center;
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.15); /* Nem rikító fehér, hanem elegáns áttetsző */
+      border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 22px;
       border-radius: 20px;
       gap: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.04);
     }
 
     .checkbox {
       width: 65px;
       height: 65px;
-      border: 4px solid #cbd5e1;
+      border: 3px solid rgba(255, 255, 255, 0.4);
       border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: white;
+      background: rgba(255, 255, 255, 0.1);
       cursor: pointer;
       flex-shrink: 0;
       font-size: 38px;
-      color: #10b981;
+      color: #2dd4bf;
     }
 
-    .list-item.checked { opacity: 0.45; background: rgba(255, 255, 255, 0.8); }
-    .list-item.checked .checkbox { background: #e2e8f0; border-color: #cbd5e1; }
-    .list-item.checked .item-text { text-decoration: line-through; color: #64748b; }
+    .list-item.checked { opacity: 0.4; background: rgba(255, 255, 255, 0.05); }
+    .list-item.checked .checkbox { background: rgba(0,0,0,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.4); }
+    .list-item.checked .item-text { text-decoration: line-through; color: rgba(255, 255, 255, 0.5); }
 
     .item-text-container {
       flex: 1;
@@ -298,14 +278,14 @@
       font-size: 34px;
       font-weight: 700;
       word-break: break-word;
-      color: #0f172a;
+      color: #ffffff; /* Fehér, hogy tökéletesen látszódjon a türkiz buborékban */
     }
 
     .unit-badge {
       font-size: 24px;
       font-weight: bold;
-      color: #475569;
-      background: #f1f5f9;
+      color: #2dd4bf;
+      background: rgba(45, 212, 191, 0.15);
       padding: 4px 14px;
       border-radius: 10px;
       width: fit-content;
@@ -317,13 +297,10 @@
       object-fit: cover;
       border-radius: 15px;
       cursor: pointer;
-      border: 3px solid #06b6d4;
+      border: 3px solid #2dd4bf;
     }
 
-    .item-actions {
-      display: flex;
-      gap: 10px;
-    }
+    .item-actions { display: flex; gap: 10px; }
     .item-actions button {
       padding: 18px;
       font-size: 26px;
@@ -331,8 +308,8 @@
       border-radius: 15px;
       cursor: pointer;
     }
-    .edit-btn { background: #f1f5f9; color: #475569; }
-    .delete-btn { background: #fee2e2; color: #ef4444; }
+    .edit-btn { background: rgba(255, 255, 255, 0.2); color: #ffffff; }
+    .delete-btn { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
 
     .empty-state {
       text-align: center;
@@ -352,9 +329,38 @@
       color: #ffffff;
       border-radius: 24px;
       margin-top: 10px;
-      margin-bottom: 50px;
+      margin-bottom: 20px;
       cursor: pointer;
     }
+
+    /* MENTÉS SZEKCIÓ SNEAKY DOBOZA ALUL */
+    .backup-container {
+      background: rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      border-radius: 28px;
+      margin-top: 20px;
+      margin-bottom: 60px;
+      border: 1px dashed rgba(255,255,255,0.15);
+      display: flex;
+      gap: 15px;
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+    .backup-btn {
+      flex: 1;
+      padding: 18px;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .backup-btn.download { background: rgba(45, 212, 191, 0.2); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.3); }
+    .backup-btn.upload { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
 
     /* MODAL ABLAKOK */
     .modal {
@@ -385,22 +391,8 @@
       color: #0f172a;
     }
 
-    .modal-card h2 {
-      font-size: 34px;
-      margin-bottom: 25px;
-      color: #0f172a;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 25px;
-      font-size: 60px;
-      font-weight: bold;
-      color: #94a3b8;
-      cursor: pointer;
-      line-height: 1;
-    }
+    .modal-card h2 { font-size: 34px; margin-bottom: 25px; color: #0f172a; }
+    .modal-close { position: absolute; top: 20px; right: 25px; font-size: 60px; font-weight: bold; color: #94a3b8; cursor: pointer; line-height: 1; }
 
     .add-cat-form #newCatIcon, .add-cat-form #newCatName,
     .edit-form-container #editItemName, .edit-form-container #editItemCategoryConfig,
@@ -410,106 +402,21 @@
       color: #0f172a !important;
     }
 
-    .add-cat-form {
-      display: flex !important;
-      gap: 10px !important;
-      margin-bottom: 25px !important;
-      width: 100% !important;
-      align-items: center !important;
-    }
-    .add-cat-form #newCatIcon {
-      width: 80px !important;
-      min-width: 80px !important;
-      padding: 15px !important;
-      font-size: 26px !important;
-      text-align: center !important;
-      border-radius: 15px !important;
-    }
-    .add-cat-form #newCatName {
-      flex: 1 !important;
-      width: 100% !important;
-      padding: 15px !important;
-      font-size: 26px !important;
-      border-radius: 15px !important;
-    }
-    .add-cat-form #saveNewCatBtn {
-      width: 65px !important;
-      min-width: 65px !important;
-      height: 65px !important;
-      padding: 0 !important;
-      font-size: 26px !important;
-      flex-shrink: 0 !important;
-      background-color: #0f766e;
-      color: white;
-    }
+    .add-cat-form { display: flex !important; gap: 10px !important; margin-bottom: 25px !important; width: 100% !important; align-items: center !important; }
+    .add-cat-form #newCatIcon { width: 80px !important; min-width: 80px !important; padding: 15px !important; font-size: 26px !important; text-align: center !important; border-radius: 15px !important; }
+    .add-cat-form #newCatName { flex: 1 !important; width: 100% !important; padding: 15px !important; font-size: 26px !important; border-radius: 15px !important; }
+    .add-cat-form #saveNewCatBtn { width: 65px !important; min-width: 65px !important; height: 65px !important; padding: 0 !important; font-size: 26px !important; flex-shrink: 0 !important; background-color: #0f766e; color: white; }
 
-    #categoryManageList {
-      max-height: 300px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .manage-cat-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: #f1f5f9;
-      border-radius: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      color: #0f172a;
-    }
-    .delete-cat-btn {
-      background: none;
-      border: none;
-      color: #ef4444;
-      font-size: 36px;
-      cursor: pointer;
-    }
+    #categoryManageList { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+    .manage-cat-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f1f5f9; border-radius: 15px; font-size: 28px; font-weight: bold; color: #0f172a; }
+    .delete-cat-btn { background: none; border: none; color: #ef4444; font-size: 36px; cursor: pointer; }
 
-    /* TERMÉK SZERKESZTŐ */
-    .edit-form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .edit-form-container #editItemName, 
-    .edit-form-container #editItemCategoryConfig {
-      width: 100% !important;
-      padding: 22px !important;
-      font-size: 30px !important;
-      font-weight: bold !important;
-      border-radius: 20px !important;
-    }
-    .edit-amount-row {
-      display: flex !important;
-      flex-direction: row !important;
-      gap: 15px !important;
-      width: 100% !important;
-    }
-    .edit-amount-row #editItemAmount {
-      width: 130px !important;
-      min-width: 130px !important;
-      padding: 22px !important;
-      font-size: 30px !important;
-      font-weight: bold !important;
-      border-radius: 20px !important;
-      text-align: center;
-    }
-    .edit-amount-row #editItemUnit {
-      flex: 1 !important;
-      width: 100% !important;
-      padding: 22px !important;
-      font-size: 30px !important;
-      font-weight: bold !important;
-      border-radius: 20px !important;
-    }
-    .edit-form-container .add-btn {
-      background-color: #0f766e;
-      color: white;
-    }
+    .edit-form-container { display: flex; flex-direction: column; gap: 20px; }
+    .edit-form-container #editItemName, .edit-form-container #editItemCategoryConfig { width: 100% !important; padding: 22px !important; font-size: 30px !important; font-weight: bold !important; border-radius: 20px !important; }
+    .edit-amount-row { display: flex !important; flex-direction: row !important; gap: 15px !important; width: 100% !important; }
+    .edit-amount-row #editItemAmount { width: 130px !important; min-width: 130px !important; padding: 22px !important; font-size: 30px !important; font-weight: bold !important; border-radius: 20px !important; text-align: center; }
+    .edit-amount-row #editItemUnit { flex: 1 !important; width: 100% !important; padding: 22px !important; font-size: 30px !important; font-weight: bold !important; border-radius: 20px !important; }
+    .edit-form-container .add-btn { background-color: #0f766e; color: white; }
   </style>
 </head>
 <body>
@@ -562,24 +469,28 @@
     <div id="shoppingList"></div>
     
     <button id="manageCatsBtn" class="secondary-btn"><i class="fas fa-tags"></i> Kategóriák kezelése</button>
+
+    <div class="backup-container">
+      <button id="downloadBackupBtn" class="backup-btn download"><i class="fas fa-download"></i> Mentés fájlba</button>
+      <button id="uploadBackupBtn" class="backup-btn upload"><i class="fas fa-upload"></i> Visszatöltés</button>
+      <input type="file" id="backupFileInput" accept=".json" style="display: none;">
+    </div>
   </div>
 
   <div id="imageModal" class="modal">
     <span class="modal-close" id="closeImgModal">&times;</span>
-    <img class="modal-content" id="modalImg">
+    <img class="modal-content" id="modalImg" style="display:block; max-width:90%; max-height:80%; margin:auto; position:relative; top:50%; transform:translateY(-50%); border-radius:16px;">
   </div>
 
   <div id="categoryModal" class="modal">
     <div class="modal-card">
       <span class="modal-close" id="closeCatModal">&times;</span>
       <h2>Kategóriák</h2>
-      
       <div class="add-cat-form">
         <input type="text" id="newCatIcon" placeholder="🍞">
         <input type="text" id="newCatName" placeholder="Új...">
         <button id="saveNewCatBtn" class="add-btn"><i class="fas fa-plus"></i></button>
       </div>
-      
       <div id="categoryManageList"></div>
     </div>
   </div>
@@ -588,10 +499,8 @@
     <div class="modal-card">
       <span class="modal-close" id="closeEditModal">&times;</span>
       <h2>Szerkesztés</h2>
-      
       <div class="edit-form-container">
         <input type="text" id="editItemName">
-        
         <div class="edit-amount-row">
           <input type="number" id="editItemAmount" min="1">
           <select id="editItemUnit">
@@ -602,9 +511,7 @@
             <option value="üveg">üveg</option>
           </select>
         </div>
-
         <select id="editItemCategoryConfig"></select>
-        
         <div class="edit-photo-area">
           <input type="file" id="editItemImageInput" accept="image/*" style="display: none;">
           <button class="secondary-btn" id="editItemPhotoBtn" style="margin:0; color:#0f172a; border-color:#cbd5e1;"><i class="fas fa-camera"></i> Új fotó</button>
@@ -613,7 +520,6 @@
             <button id="removeEditImageBtn" style="background:none; border:none; font-size:40px;">❌</button>
           </div>
         </div>
-        
         <button id="saveEditItemBtn" class="add-btn" style="width:100%; margin-top:25px; padding:25px;"><i class="fas fa-save"></i> Mentés</button>
       </div>
     </div>
@@ -622,6 +528,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <script>
+    // FIGYELEM: IDE ÍRD BE A PONTOS FIREBASE LINKEDET!
     const FIREBASE_DB_URL = "https://smartlysta-default-rtdb.europe-west1.firebasedatabase.app/";
 
     const itemInput = document.getElementById('itemInput');
@@ -639,6 +546,10 @@
     const removeImageBtn = document.getElementById('removeImageBtn');
     const syncIndicator = document.getElementById('syncIndicator');
     const vibeToggleBtn = document.getElementById('vibeToggleBtn');
+
+    const downloadBackupBtn = document.getElementById('downloadBackupBtn');
+    const uploadBackupBtn = document.getElementById('uploadBackupBtn');
+    const backupFileInput = document.getElementById('backupFileInput');
 
     const imgModal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
@@ -660,26 +571,25 @@
 
     let isVibrationEnabled = localStorage.getItem('vibrationEnabled') !== 'false';
 
-    // FIX ÉS KÖTELEZŐEN KIKÉNYSZERÍTETT SORRENDŰ ALAPÉRTELMEZETT KATEGÓRIÁK
     const defaultCategories = {
       'Pékáru': { icon: '🍞' },
-      'Húsfélék': { icon: '🥩' },
       'Tejtermék': { icon: '🥛' },
       'Zöldség-Gyümölcs': { icon: '🍎' },
-      'Háztartási': { icon: '🧻' },
-      'Vegyiáru': { icon: '🧼' },
+      'Húsáru': { icon: '🥩' },
       'Szárazáru': { icon: '🍝' },
+      'Vegyszer': { icon: '🧼' },
+      'Háztartás': { icon: '🧻' },
       'Egyéb': { icon: '❓' }
     };
     let customCategories = {};
 
     function updateVibeToggleButtonUI() {
       if (isVibrationEnabled) {
-        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
         vibeToggleBtn.classList.remove('muted');
+        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
       } else {
-        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
         vibeToggleBtn.classList.add('muted');
+        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
       }
     }
 
@@ -690,13 +600,8 @@
       if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(50);
     };
 
-    function triggerLocalVibrate() {
-      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(80); 
-    }
-
-    function triggerRemoteUpdateVibrate() {
-      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate([100, 100, 100]); 
-    }
+    function triggerLocalVibrate() { if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(80); }
+    function triggerRemoteUpdateVibrate() { if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate([100, 100, 100]); }
 
     function saveAllToCloud() {
       isLocalAction = true; 
@@ -710,46 +615,52 @@
       .catch(err => { console.error("Felhő hiba:", err); isLocalAction = false; });
     }
 
+    // BIZTONSÁGI MENTÉS: LETÖLTÉS FÁJLBA
+    downloadBackupBtn.onclick = () => {
+      triggerLocalVibrate();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ lists: allLists, categories: customCategories }));
+      const downloadAnchorElement = document.createElement('a');
+      downloadAnchorElement.setAttribute("href", dataStr);
+      downloadAnchorElement.setAttribute("download", "smartysta_mentes.json");
+      document.body.appendChild(downloadAnchorElement);
+      downloadAnchorElement.click();
+      downloadAnchorElement.remove();
+    };
+
+    // BIZTONSÁGI MENTÉS: VISSZATÖLTÉS FÁJLÓL
+    uploadBackupBtn.onclick = () => { triggerLocalVibrate(); backupFileInput.click(); };
+    backupFileInput.onchange = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (parsed.lists) {
+            allLists = parsed.lists;
+            if (parsed.categories) customCategories = parsed.categories;
+            saveAllToCloud();
+            alert("Szuper! A mentés sikeresen visszatöltve a felhőbe!");
+          } else {
+            alert("Hibás fájlformátum!");
+          }
+        } catch (err) {
+          alert("Nem sikerült beolvasni a fájlt.");
+        }
+      };
+      reader.readAsText(file);
+    };
+
     function handleRemoteData(remoteData) {
       if (!remoteData) return;
-
-      // Ha nincs még kategória a felhőben, vagy a régi struktúra van meg, kényszerítsük az új sorrendet
-      if (!remoteData.categories || !remoteData.categories['Húsfélék']) {
+      if (!remoteData.categories || Object.keys(remoteData.categories).length === 0) {
         customCategories = defaultCategories;
         saveAllToCloud();
       } else {
-        // Megtartjuk a felhőben lévő kategóriákat, de az új sorrendet kényszerítjük ki rájuk
-        const ordered = {};
-        Object.keys(defaultCategories).forEach(key => {
-          if (remoteData.categories[key]) {
-            ordered[key] = remoteData.categories[key];
-          } else if (key === 'Húsfélék' && remoteData.categories['Húsáru']) {
-            ordered['Húsfélék'] = { icon: '🥩' };
-          } else {
-            ordered[key] = defaultCategories[key];
-          }
-        });
-        // Az esetlegesen felhasználó által manuálisan hozzáadott többi kategóriát a végére fűzzük
-        Object.keys(remoteData.categories).forEach(key => {
-          if (!ordered[key] && key !== 'Húsáru') ordered[key] = remoteData.categories[key];
-        });
-        customCategories = ordered;
+        customCategories = remoteData.categories;
       }
-
-      if (remoteData.lists) {
-        allLists = remoteData.lists;
-        // Ha maradtak régi "Húsáru" kategóriás termékek, migráljuk át őket "Húsfélék"-re
-        Object.keys(allLists).forEach(listName => {
-          if (allLists[listName]) {
-            allLists[listName].forEach(item => {
-              if (item.category === 'Húsáru') item.category = 'Húsfélék';
-            });
-          }
-        });
-      }
-      
+      if (remoteData.lists) allLists = remoteData.lists;
       if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
-
       syncIndicator.style.color = "#2dd4bf";
       updateCategoryDropdowns();
       updateSelector();
@@ -759,50 +670,32 @@
     function startCloudSync() {
       const targetUrl = `${FIREBASE_DB_URL}data.json`;
       const eventSource = new EventSource(targetUrl);
-
       eventSource.addEventListener('put', function(event) {
         try {
           const response = JSON.parse(event.data);
           if (response && response.data) {
             if (!isLocalAction) triggerRemoteUpdateVibrate(); 
-            
-            if (response.path === "/") {
-              handleRemoteData(response.data);
-            } else {
-              // Biztonsági okokból bármilyen részleges frissítésnél újraolvassuk a teljes adatbázist
-              fetch(targetUrl).then(res => res.json()).then(d => handleRemoteData(d));
-            }
+            if (response.path === "/") handleRemoteData(response.data);
+            else if (response.path === "/lists") { allLists = response.data; updateSelector(); renderList(); }
+            else if (response.path === "/categories") { customCategories = response.data || defaultCategories; updateCategoryDropdowns(); renderList(); }
             syncIndicator.style.color = "#2dd4bf";
           }
         } catch (e) {}
       });
-
       eventSource.onmessage = function(event) {
-        try {
-          const response = JSON.parse(event.data);
-          if (response && response.data) {
-            if (!isLocalAction) triggerRemoteUpdateVibrate();
-            handleRemoteData(response.data);
-          }
-        } catch(err) {}
+        try { const response = JSON.parse(event.data); if (response && response.data) { if (!isLocalAction) triggerRemoteUpdateVibrate(); handleRemoteData(response.data); } } catch(err) {}
       };
-
       eventSource.onerror = function() {
-        fetch(targetUrl).then(res => res.json()).then(remoteData => {
-          if (remoteData) handleRemoteData(remoteData);
-        }).catch(() => { syncIndicator.style.color = "#ef4444"; });
+        fetch(targetUrl).then(res => res.json()).then(remoteData => { if (remoteData) handleRemoteData(remoteData); }).catch(() => { syncIndicator.style.color = "#ef4444"; });
       };
     }
 
     function updateCategoryDropdowns() {
-      categorySelect.innerHTML = '';
-      editItemCategoryConfig.innerHTML = '';
+      categorySelect.innerHTML = ''; editItemCategoryConfig.innerHTML = '';
       Object.keys(customCategories).forEach(catName => {
         const text = `${customCategories[catName].icon} ${catName}`;
-        const option1 = document.createElement('option'); option1.value = catName; option1.textContent = text;
-        categorySelect.appendChild(option1);
-        const option2 = document.createElement('option'); option2.value = catName; option2.textContent = text;
-        editItemCategoryConfig.appendChild(option2);
+        const option1 = document.createElement('option'); option1.value = catName; option1.textContent = text; categorySelect.appendChild(option1);
+        const option2 = document.createElement('option'); option2.value = catName; option2.textContent = text; editItemCategoryConfig.appendChild(option2);
       });
     }
 
@@ -826,29 +719,22 @@
       const fallbackCategory = availableCategories[0] || 'Egyéb';
 
       for (let i = items.length - 1; i >= 0; i--) {
-        const item = items[i];
-        let cat = item.category || fallbackCategory;
-        if (cat === 'Húsáru') cat = 'Húsfélék';
+        const item = items[i]; let cat = item.category || fallbackCategory;
         if (!customCategories[cat]) cat = fallbackCategory;
         if (!groupedItems[cat]) groupedItems[cat] = [];
         groupedItems[cat].push({ ...item, originalIndex: i });
       }
 
-      // Pontosan a kikényszerített kulcssorrend alapján megyünk végig a listázásnál
       availableCategories.forEach(categoryName => {
-        const categoryGroup = groupedItems[categoryName];
-        if (!categoryGroup || categoryGroup.length === 0) return;
-        
+        const categoryGroup = groupedItems[categoryName]; if (!categoryGroup || categoryGroup.length === 0) return;
         categoryGroup.sort((a, b) => a.checked - b.checked);
-
         const config = customCategories[categoryName];
         const cardDiv = document.createElement('div'); cardDiv.className = 'category-card';
         cardDiv.innerHTML = `<div class="category-title">${config.icon} ${categoryName}</div>`;
         const listContainer = document.createElement('div'); listContainer.className = 'item-list-container';
 
         categoryGroup.forEach(item => {
-          const itemDiv = document.createElement('div');
-          itemDiv.className = `list-item ${item.checked ? 'checked' : ''}`;
+          const itemDiv = document.createElement('div'); itemDiv.className = `list-item ${item.checked ? 'checked' : ''}`;
           const imgHtml = item.image ? `<img src="${item.image}" class="item-img">` : '';
           itemDiv.innerHTML = `
             <div class="checkbox">${item.checked ? '<i class="fas fa-check"></i>' : ''}</div>
@@ -860,18 +746,10 @@
             </div>
           `;
           itemDiv.querySelectorAll('.checkbox, .item-text-container').forEach(el => {
-            el.onclick = () => { 
-              triggerLocalVibrate(); 
-              allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; 
-              saveAllToCloud(); 
-            };
+            el.onclick = () => { triggerLocalVibrate(); allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; saveAllToCloud(); };
           });
           if (item.image) { itemDiv.querySelector('.item-img').onclick = () => { imgModal.style.display = "block"; modalImg.src = item.image; }; }
-          itemDiv.querySelector('.delete-btn').onclick = () => { 
-            triggerLocalVibrate(); 
-            allLists[currentListName].splice(item.originalIndex, 1); 
-            saveAllToCloud(); 
-          };
+          itemDiv.querySelector('.delete-btn').onclick = () => { triggerLocalVibrate(); allLists[currentListName].splice(item.originalIndex, 1); saveAllToCloud(); };
           itemDiv.querySelector('.edit-btn').onclick = () => { openEditModalWindow(item.originalIndex); };
           listContainer.appendChild(itemDiv);
         });
@@ -882,10 +760,9 @@
     function openEditModalWindow(index) {
       editingItemIndex = index; const item = allLists[currentListName][index];
       editItemName.value = item.name; editItemAmount.value = item.amount; editItemUnit.value = item.unit;
-      editItemCategoryConfig.value = item.category === 'Húsáru' ? 'Húsfélék' : (item.category || Object.keys(customCategories)[0] || 'Egyéb');
+      editItemCategoryConfig.value = item.category || Object.keys(customCategories)[0] || 'Egyéb';
       editingBase64Image = item.image || "";
-      editImagePreview.style.display = editingBase64Image ? 'flex' : 'none';
-      editItemModal.style.display = "block";
+      editImagePreview.style.display = editingBase64Image ? 'flex' : 'none'; editItemModal.style.display = "block";
     }
 
     saveEditItemBtn.onclick = () => {
@@ -910,27 +787,19 @@
       });
       document.querySelectorAll('.delete-cat-btn').forEach(btn => {
         btn.onclick = () => {
-          const catToDelete = btn.getAttribute('data-name'); const keys = Object.keys(customCategories); if (keys.length <= 1) return;
-          if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { 
-            triggerLocalVibrate(); 
-            delete customCategories[catToDelete]; 
-            saveAllToCloud(); 
-            renderManageCategoryList(); 
-          }
+          const catToDelete = btn.getAttribute('data-name'); if (Object.keys(customCategories).length <= 1) return;
+          if (confirm(`Törlöd?`)) { triggerLocalVibrate(); delete customCategories[catToDelete]; saveAllToCloud(); renderManageCategoryList(); }
         };
       });
     }
 
     saveNewCatBtn.onclick = () => {
       const name = newCatName.value.trim(); const icon = newCatIcon.value.trim() || '📦'; if (name === '' || customCategories[name]) return;
-      triggerLocalVibrate();
-      customCategories[name] = { icon }; newCatName.value = ''; newCatIcon.value = ''; saveAllToCloud(); renderManageCategoryList();
+      triggerLocalVibrate(); customCategories[name] = { icon }; newCatName.value = ''; newCatIcon.value = ''; saveAllToCloud(); renderManageCategoryList();
     };
 
     manageCatsBtn.onclick = () => { catModal.style.display = "block"; renderManageCategoryList(); };
-    closeCatModal.onclick = () => catModal.style.display = "none";
-    closeImgModal.onclick = () => imgModal.style.display = "none";
-    closeEditModal.onclick = () => editItemModal.style.display = "none";
+    closeCatModal.onclick = () => catModal.style.display = "none"; closeImgModal.onclick = () => imgModal.style.display = "none"; closeEditModal.onclick = () => editItemModal.style.display = "none";
     window.onclick = e => { if (e.target === imgModal) imgModal.style.display = "none"; if (e.target === catModal) catModal.style.display = "none"; if (e.target === editItemModal) editItemModal.style.display = "none"; };
 
     photoBtn.onclick = () => imageInput.click();
@@ -942,39 +811,20 @@
     function addItem() {
       const name = itemInput.value.trim(); const amount = amountInput.value.trim() || "1"; const unit = unitSelect.value; const category = categorySelect.value || Object.keys(customCategories)[0] || 'Egyéb';
       if (name !== '') { 
-        triggerLocalVibrate();
-        if (!allLists[currentListName]) allLists[currentListName] = []; 
+        triggerLocalVibrate(); if (!allLists[currentListName]) allLists[currentListName] = []; 
         allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); 
         itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; 
         saveAllToCloud(); itemInput.focus(); 
       }
     }
 
-    newListBtn.onclick = () => { 
-      const name = prompt('Új lista neve:'); 
-      if (!name || name.trim() === '') return; 
-      const trimmed = name.trim(); 
-      if (allLists[trimmed]) return; 
-      
-      triggerLocalVibrate(); 
-      allLists[trimmed] = []; 
-      currentListName = trimmed; 
-      localStorage.setItem('currentShoppingListName', currentListName);
-      
-      updateSelector();
-      renderList();
-      saveAllToCloud(); 
-    };
-
-    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
-
+    newListBtn.onclick = () => { const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; triggerLocalVibrate(); allLists[trimmed] = []; currentListName = trimmed; localStorage.setItem('currentShoppingListName', currentListName); updateSelector(); renderList(); saveAllToCloud(); };
+    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
 
     // INDÍTÁS
-    updateVibeToggleButtonUI();
-    customCategories = defaultCategories;
-    updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
+    updateVibeToggleButtonUI(); customCategories = defaultCategories; updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
   </script>
 </body>
 </html>
