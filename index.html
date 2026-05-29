@@ -87,36 +87,37 @@
       color: #ffffff;
     }
 
-    /* VISSZAÁLLÍTOTT VILÁGOSABB BEVITELI MEZŐK */
+    /* KONTRASTOS FELSŐ BUBORÉK HÁTTÉR */
     .input-area-container {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       padding: 25px;
       border-radius: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
       margin-bottom: 30px;
     }
 
+    /* TISZTA FEHÉR MEZŐK SÖTÉT SZÖVEGGEL A MAXIMÁLIS OLVASHATÓSÁGÉRT */
     #itemInput {
       width: 100%;
       padding: 25px;
       font-size: 32px;
       font-weight: bold;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 2px solid #ffffff;
       border-radius: 20px;
       margin-bottom: 20px;
-      color: #ffffff;
-      background-color: rgba(255, 255, 255, 0.1);
+      color: #0f172a;
+      background-color: #ffffff;
     }
     #itemInput::placeholder {
-      color: rgba(255, 255, 255, 0.6);
+      color: #94a3b8;
     }
 
     #itemInput:focus, #listSelect:focus, #amountInput:focus, #unitSelect:focus, #categorySelect:focus {
       border-color: #2dd4bf;
-      box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+      box-shadow: 0 0 15px rgba(45, 212, 191, 0.5);
       outline: none;
     }
 
@@ -138,10 +139,10 @@
       font-size: 28px;
       font-weight: bold;
       text-align: center;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 2px solid #ffffff;
       border-radius: 20px;
-      color: #ffffff;
-      background-color: rgba(255, 255, 255, 0.1);
+      color: #0f172a;
+      background-color: #ffffff;
     }
 
     #unitSelect, #categorySelect {
@@ -149,14 +150,14 @@
       padding: 22px;
       font-size: 28px;
       font-weight: bold;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 2px solid #ffffff;
       border-radius: 20px;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
+      background-color: #ffffff;
+      color: #0f172a;
     }
     #unitSelect option, #categorySelect option {
-      background-color: #115e59;
-      color: #ffffff;
+      background-color: #ffffff;
+      color: #0f172a;
     }
 
     .actions-row {
@@ -180,23 +181,26 @@
     .icon-btn.add { background-color: #10b981; color: white; }
     .icon-btn.delete { background-color: #ef4444; color: white; }
     
+    /* JOBBAN LÁTHATÓ SÖTÉTKÉK KÉP GOMB */
     .photo-btn {
       flex: 1;
-      background-color: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: #1e3a8a;
+      border: none;
       color: white;
       font-weight: bold;
       gap: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
     .photo-btn.has-image {
       background-color: #06b6d4;
       border-color: #2dd4bf;
     }
 
+    /* STABILOZOTT OK GOMB */
     .add-btn {
       flex: 1.5;
-      background-color: #2dd4bf;
-      color: #0f766e;
+      background-color: #0f766e;
+      color: #ffffff;
       font-size: 30px;
       font-weight: 800;
       border: none;
@@ -206,7 +210,7 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 4px 14px rgba(45, 212, 191, 0.3);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.2);
     }
 
     #imagePreviewContainer {
@@ -342,7 +346,7 @@
       font-weight: bold;
     }
 
-    /* MENTÉS ÉS VISSZATÖLTÉS UTOLSÓ VERZIÓ SZERINTI SZEKCIÓ */
+    /* MENTÉS ÉS VISSZATÖLTÉS PANELSOR */
     .backup-row {
       display: flex;
       gap: 15px;
@@ -460,4 +464,534 @@
 
     #categoryManageList {
       max-height: 300px;
-      overflow
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .manage-cat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 15px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #0f172a;
+    }
+    .delete-cat-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 36px;
+      cursor: pointer;
+    }
+
+    /* TERMÉK SZERKESZTŐ */
+    .edit-form-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .edit-form-container #editItemName, 
+    .edit-form-container #editItemCategoryConfig {
+      width: 100% !important;
+      padding: 22px !important;
+      font-size: 30px !important;
+      font-weight: bold !important;
+      border-radius: 20px !important;
+    }
+    .edit-amount-row {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 15px !important;
+      width: 100% !important;
+    }
+    .edit-amount-row #editItemAmount {
+      width: 130px !important;
+      min-width: 130px !important;
+      padding: 22px !important;
+      font-size: 30px !important;
+      font-weight: bold !important;
+      border-radius: 20px !important;
+      text-align: center;
+    }
+    .edit-amount-row #editItemUnit {
+      flex: 1 !important;
+      width: 100% !important;
+      padding: 22px !important;
+      font-size: 30px !important;
+      font-weight: bold !important;
+      border-radius: 20px !important;
+    }
+    .edit-form-container .add-btn {
+      background-color: #0f766e;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <h1>
+        🛒 Smartysta 
+        <span id="syncIndicator" style="font-size: 32px; color: #ef4444;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span>
+        <button id="vibeToggleBtn" class="vibe-toggle-btn" title="Rezgések ki/be"><i class="fas fa-volume-up"></i></button>
+      </h1>
+    </header>
+
+    <div class="list-selector-area">
+      <select id="listSelect"></select>
+      <button class="icon-btn add" id="newListBtn" title="Új lista"><i class="fas fa-folder-plus"></i></button>
+      <button class="icon-btn delete" id="deleteListBtn" title="Törlés"><i class="fas fa-trash-alt"></i></button>
+    </div>
+
+    <div class="input-area-container">
+      <input type="text" id="itemInput" placeholder="Új termék..." autocomplete="off">
+      
+      <div class="details-row-large">
+        <div class="amount-area-large">
+          <input type="number" id="amountInput" value="1" min="1">
+          <select id="unitSelect">
+            <option value="db">db</option>
+            <option value="kg">kg</option>
+            <option value="l">liter</option>
+            <option value="csg">csom.</option>
+            <option value="üveg">üveg</option>
+          </select>
+        </div>
+        
+        <select id="categorySelect"></select>
+      </div>
+      
+      <div class="actions-row">
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
+        <button class="icon-btn photo-btn" id="photoBtn"><i class="fas fa-camera"></i> Kép</button>
+        <button class="add-btn" id="addBtn"><i class="fas fa-plus"></i> OK</button>
+      </div>
+    </div>
+
+    <div id="imagePreviewContainer" style="display: none;">
+      <span>📸 Kép megvan!</span>
+      <button id="removeImageBtn">❌</button>
+    </div>
+
+    <div id="shoppingList"></div>
+    
+    <div class="backup-row">
+      <button id="downloadBackupBtn" class="secondary-btn"><i class="fas fa-download"></i> Mentés fájlba</button>
+      <input type="file" id="uploadBackupInput" accept=".json" style="display: none;">
+      <button id="uploadBackupBtn" class="secondary-btn"><i class="fas fa-upload"></i> Visszatöltés</button>
+    </div>
+
+    <button id="manageCatsBtn" class="secondary-btn"><i class="fas fa-tags"></i> Kategóriák kezelése</button>
+  </div>
+
+  <div id="imageModal" class="modal">
+    <span class="modal-close" id="closeImgModal">&times;</span>
+    <img class="modal-content" id="modalImg">
+  </div>
+
+  <div id="categoryModal" class="modal">
+    <div class="modal-card">
+      <span class="modal-close" id="closeCatModal">&times;</span>
+      <h2>Kategóriák</h2>
+      
+      <div class="add-cat-form">
+        <input type="text" id="newCatIcon" placeholder="🍞">
+        <input type="text" id="newCatName" placeholder="Új...">
+        <button id="saveNewCatBtn" class="add-btn"><i class="fas fa-plus"></i></button>
+      </div>
+      
+      <div id="categoryManageList"></div>
+    </div>
+  </div>
+
+  <div id="editItemModal" class="modal">
+    <div class="modal-card">
+      <span class="modal-close" id="closeEditModal">&times;</span>
+      <h2>Szerkesztés</h2>
+      
+      <div class="edit-form-container">
+        <input type="text" id="editItemName">
+        
+        <div class="edit-amount-row">
+          <input type="number" id="editItemAmount" min="1">
+          <select id="editItemUnit">
+            <option value="db">db</option>
+            <option value="kg">kg</option>
+            <option value="l">liter</option>
+            <option value="csg">csom.</option>
+            <option value="üveg">üveg</option>
+          </select>
+        </div>
+
+        <select id="editItemCategoryConfig"></select>
+        
+        <div class="edit-photo-area">
+          <input type="file" id="editItemImageInput" accept="image/*" style="display: none;">
+          <button class="secondary-btn" id="editItemPhotoBtn" style="margin:0; color:#0f172a; border-color:#cbd5e1;"><i class="fas fa-camera"></i> Új fotó</button>
+          <div id="editImagePreview" style="margin-top:15px; display:none; justify-content:space-between; align-items:center; background:#f1f5f9; padding:20px; border-radius:14px;">
+            <span>📸 Kép OK!</span>
+            <button id="removeEditImageBtn" style="background:none; border:none; font-size:40px;">❌</button>
+          </div>
+        </div>
+        
+        <button id="saveEditItemBtn" class="add-btn" style="width:100%; margin-top:25px; padding:25px;"><i class="fas fa-save"></i> Mentés</button>
+      </div>
+    </div>
+  </div>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <script>
+    const FIREBASE_DB_URL = "https://smartlysta-default-rtdb.europe-west1.firebasedatabase.app/";
+
+    const itemInput = document.getElementById('itemInput');
+    const amountInput = document.getElementById('amountInput');
+    const unitSelect = document.getElementById('unitSelect');
+    const categorySelect = document.getElementById('categorySelect');
+    const imageInput = document.getElementById('imageInput');
+    const photoBtn = document.getElementById('photoBtn');
+    const addBtn = document.getElementById('addBtn');
+    const shoppingList = document.getElementById('shoppingList');
+    const listSelect = document.getElementById('listSelect');
+    const newListBtn = document.getElementById('newListBtn');
+    const deleteListBtn = document.getElementById('deleteListBtn');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    const syncIndicator = document.getElementById('syncIndicator');
+    const vibeToggleBtn = document.getElementById('vibeToggleBtn');
+    const downloadBackupBtn = document.getElementById('downloadBackupBtn');
+    const uploadBackupBtn = document.getElementById('uploadBackupBtn');
+    const uploadBackupInput = document.getElementById('uploadBackupInput');
+
+    const imgModal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const closeImgModal = document.getElementById('closeImgModal');
+    const catModal = document.getElementById('categoryModal');
+    const manageCatsBtn = document.getElementById('manageCatsBtn');
+    const closeCatModal = document.getElementById('closeCatModal');
+    const categoryManageList = document.getElementById('categoryManageList');
+    const newCatIcon = document.getElementById('newCatIcon');
+    const newCatName = document.getElementById('newCatName');
+    const saveNewCatBtn = document.getElementById('saveNewCatBtn');
+
+    let allLists = { 'Alapértelmezett': [] };
+    let currentListName = localStorage.getItem('currentShoppingListName') || 'Alapértelmezett';
+    let currentBase64Image = "";
+    let editingItemIndex = null;
+    let editingBase64Image = "";
+    let isLocalAction = false; 
+
+    let isVibrationEnabled = localStorage.getItem('vibrationEnabled') !== 'false';
+
+    const defaultCategories = {
+      'Pékáru': { icon: '🍞' },
+      'Tejtermék': { icon: '🥛' },
+      'Zöldség-Gyümölcs': { icon: '🍎' },
+      'Húsáru': { icon: '🥩' },
+      'Szárazáru': { icon: '🍝' },
+      'Vegyszer': { icon: '🧼' },
+      'Háztartás': { icon: '🧻' },
+      'Egyéb': { icon: '❓' }
+    };
+    let customCategories = {};
+
+    function updateVibeToggleButtonUI() {
+      if (isVibrationEnabled) {
+        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        vibeToggleBtn.classList.remove('muted');
+      } else {
+        vibeToggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        vibeToggleBtn.classList.add('muted');
+      }
+    }
+
+    vibeToggleBtn.onclick = () => {
+      isVibrationEnabled = !isVibrationEnabled;
+      localStorage.setItem('vibrationEnabled', isVibrationEnabled);
+      updateVibeToggleButtonUI();
+      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(50);
+    };
+
+    function triggerLocalVibrate() {
+      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(80); 
+    }
+
+    function triggerRemoteUpdateVibrate() {
+      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate([100, 100, 100]); 
+    }
+
+    function saveAllToCloud() {
+      isLocalAction = true; 
+      localStorage.setItem('currentShoppingListName', currentListName);
+      fetch(`${FIREBASE_DB_URL}data.json`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lists: allLists, categories: customCategories })
+      })
+      .then(() => { isLocalAction = false; })
+      .catch(err => { console.error("Felhő hiba:", err); isLocalAction = false; });
+    }
+
+    function handleRemoteData(remoteData) {
+      if (!remoteData) return;
+      if (!remoteData.categories || Object.keys(remoteData.categories).length === 0) {
+        customCategories = defaultCategories;
+        saveAllToCloud();
+      } else {
+        customCategories = remoteData.categories;
+      }
+      if (remoteData.lists) allLists = remoteData.lists;
+      if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
+
+      syncIndicator.style.color = "#2dd4bf";
+      updateCategoryDropdowns();
+      updateSelector();
+      renderList();
+    }
+
+    function startCloudSync() {
+      const targetUrl = `${FIREBASE_DB_URL}data.json`;
+      const eventSource = new EventSource(targetUrl);
+
+      eventSource.addEventListener('put', function(event) {
+        try {
+          const response = JSON.parse(event.data);
+          if (response && response.data) {
+            if (!isLocalAction) triggerRemoteUpdateVibrate(); 
+            if (response.path === "/") {
+              handleRemoteData(response.data);
+            } else if (response.path === "/lists") {
+              allLists = response.data;
+              updateSelector(); renderList();
+            } else if (response.path === "/categories") {
+              customCategories = response.data || defaultCategories;
+              updateCategoryDropdowns(); renderList();
+            }
+            syncIndicator.style.color = "#2dd4bf";
+          }
+        } catch (e) {}
+      });
+
+      eventSource.onmessage = function(event) {
+        try {
+          const response = JSON.parse(event.data);
+          if (response && response.data) {
+            if (!isLocalAction) triggerRemoteUpdateVibrate();
+            handleRemoteData(response.data);
+          }
+        } catch(err) {}
+      };
+
+      eventSource.onerror = function() {
+        fetch(targetUrl).then(res => res.json()).then(remoteData => {
+          if (remoteData) handleRemoteData(remoteData);
+        }).catch(() => { syncIndicator.style.color = "#ef4444"; });
+      };
+    }
+
+    function updateCategoryDropdowns() {
+      categorySelect.innerHTML = ''; editItemCategoryConfig.innerHTML = '';
+      Object.keys(customCategories).forEach(catName => {
+        const text = `${customCategories[catName].icon} ${catName}`;
+        const option1 = document.createElement('option'); option1.value = catName; option1.textContent = text;
+        categorySelect.appendChild(option1);
+        const option2 = document.createElement('option'); option2.value = catName; option2.textContent = text;
+        editItemCategoryConfig.appendChild(option2);
+      });
+    }
+
+    function updateSelector() {
+      listSelect.innerHTML = '';
+      Object.keys(allLists).forEach(name => {
+        const option = document.createElement('option'); option.value = name;
+        const activeCount = allLists[name] ? allLists[name].filter(item => !item.checked).length : 0;
+        option.textContent = name + ` (${activeCount})`;
+        if (name === currentListName) option.selected = true;
+        listSelect.appendChild(option);
+      });
+    }
+
+    function renderList() {
+      shoppingList.innerHTML = '';
+      const items = allLists[currentListName] || [];
+      if (items.length === 0) { shoppingList.innerHTML = '<div class="empty-state">Ez a lista még üres.</div>'; return; }
+      const groupedItems = {};
+      const availableCategories = Object.keys(customCategories);
+      const fallbackCategory = availableCategories[0] || 'Egyéb';
+
+      for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        let cat = item.category || fallbackCategory;
+        if (!customCategories[cat]) cat = fallbackCategory;
+        if (!groupedItems[cat]) groupedItems[cat] = [];
+        groupedItems[cat].push({ ...item, originalIndex: i });
+      }
+
+      availableCategories.forEach(categoryName => {
+        const categoryGroup = groupedItems[categoryName];
+        if (!categoryGroup || categoryGroup.length === 0) return;
+        categoryGroup.sort((a, b) => a.checked - b.checked);
+
+        const config = customCategories[categoryName];
+        const cardDiv = document.createElement('div'); cardDiv.className = 'category-card';
+        cardDiv.innerHTML = `<div class="category-title">${config.icon} ${categoryName}</div>`;
+        const listContainer = document.createElement('div'); listContainer.className = 'item-list-container';
+
+        categoryGroup.forEach(item => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = `list-item ${item.checked ? 'checked' : ''}`;
+          const imgHtml = item.image ? `<img src="${item.image}" class="item-img">` : '';
+          itemDiv.innerHTML = `
+            <div class="checkbox">${item.checked ? '<i class="fas fa-check"></i>' : ''}</div>
+            <div class="item-text-container"><span class="item-text">${item.name}</span><span class="unit-badge">${item.amount} ${item.unit}</span></div>
+            ${imgHtml}
+            <div class="item-actions">
+              <button class="edit-btn"><i class="fas fa-pencil-alt"></i></button>
+              <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            </div>
+          `;
+          itemDiv.querySelectorAll('.checkbox, .item-text-container').forEach(el => {
+            el.onclick = () => { 
+              triggerLocalVibrate(); 
+              allLists[currentListName][item.originalIndex].checked = !allLists[currentListName][item.originalIndex].checked; 
+              saveAllToCloud(); 
+            };
+          });
+          if (item.image) { itemDiv.querySelector('.item-img').onclick = () => { imgModal.style.display = "block"; modalImg.src = item.image; }; }
+          itemDiv.querySelector('.delete-btn').onclick = () => { 
+            triggerLocalVibrate(); 
+            allLists[currentListName].splice(item.originalIndex, 1); 
+            saveAllToCloud(); 
+          };
+          itemDiv.querySelector('.edit-btn').onclick = () => { openEditModalWindow(item.originalIndex); };
+          listContainer.appendChild(itemDiv);
+        });
+        cardDiv.appendChild(listContainer); shoppingList.appendChild(cardDiv);
+      });
+    }
+
+    function openEditModalWindow(index) {
+      editingItemIndex = index; const item = allLists[currentListName][index];
+      editItemName.value = item.name; editItemAmount.value = item.amount; editItemUnit.value = item.unit;
+      editItemCategoryConfig.value = item.category || Object.keys(customCategories)[0] || 'Egyéb';
+      editingBase64Image = item.image || "";
+      editImagePreview.style.display = editingBase64Image ? 'flex' : 'none';
+      editItemModal.style.display = "block";
+    }
+
+    saveEditItemBtn.onclick = () => {
+      if (editingItemIndex === null) return; const name = editItemName.value.trim(); if (name === "") return;
+      triggerLocalVibrate();
+      allLists[currentListName][editingItemIndex] = { name, amount: editItemAmount.value || "1", unit: editItemUnit.value, category: editItemCategoryConfig.value, image: editingBase64Image, checked: allLists[currentListName][editingItemIndex].checked };
+      saveAllToCloud(); editItemModal.style.display = "none"; editingItemIndex = null;
+    };
+
+    editItemPhotoBtn.onclick = () => editItemImageInput.click();
+    editItemImageInput.onchange = function() {
+      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { editingBase64Image = e.target.result; editImagePreview.style.display = 'flex'; }; reader.readAsDataURL(file); }
+    };
+    removeEditImageBtn.onclick = () => { editingBase64Image = ""; editItemImageInput.value = ""; editImagePreview.style.display = 'none'; };
+
+    function renderManageCategoryList() {
+      categoryManageList.innerHTML = '';
+      Object.keys(customCategories).forEach(catName => {
+        const item = customCategories[catName]; const itemDiv = document.createElement('div'); itemDiv.className = 'manage-cat-item';
+        itemDiv.innerHTML = `<span>${item.icon} ${catName}</span><button class="delete-cat-btn" data-name="${catName}"><i class="fas fa-minus-circle"></i></button>`;
+        categoryManageList.appendChild(itemDiv);
+      });
+      document.querySelectorAll('.delete-cat-btn').forEach(btn => {
+        btn.onclick = () => {
+          const catToDelete = btn.getAttribute('data-name'); const keys = Object.keys(customCategories); if (keys.length <= 1) return;
+          if (confirm(`Törlöd a(z) "${catToDelete}" kategóriát?`)) { 
+            triggerLocalVibrate(); delete customCategories[catToDelete]; saveAllToCloud(); renderManageCategoryList(); 
+          }
+        };
+      });
+    }
+
+    saveNewCatBtn.onclick = () => {
+      const name = newCatName.value.trim(); const icon = newCatIcon.value.trim() || '📦'; if (name === '' || customCategories[name]) return;
+      triggerLocalVibrate(); customCategories[name] = { icon }; newCatName.value = ''; newCatIcon.value = ''; saveAllToCloud(); renderManageCategoryList();
+    };
+
+    downloadBackupBtn.onclick = () => {
+      triggerLocalVibrate();
+      const backupData = { lists: allLists, categories: customCategories };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "smartysta_backup.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    };
+
+    uploadBackupBtn.onclick = () => { triggerLocalVibrate(); uploadBackupInput.click(); };
+    uploadBackupInput.onchange = function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const uploadedData = JSON.parse(e.target.result);
+            if (uploadedData.lists && uploadedData.categories) {
+              allLists = uploadedData.lists;
+              customCategories = uploadedData.categories;
+              saveAllToCloud();
+              alert("Adatok sikeresen visszatöltve a felhőbe!");
+            } else {
+              alert("Hibás fájlformátum!");
+            }
+          } catch (err) {
+            alert("Hiba történt a beolvasás során!");
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    manageCatsBtn.onclick = () => { catModal.style.display = "block"; renderManageCategoryList(); };
+    closeCatModal.onclick = () => catModal.style.display = "none";
+    closeImgModal.onclick = () => imgModal.style.display = "none";
+    closeEditModal.onclick = () => editItemModal.style.display = "none";
+    window.onclick = e => { if (e.target === imgModal) imgModal.style.display = "none"; if (e.target === catModal) catModal.style.display = "none"; if (e.target === editItemModal) editItemModal.style.display = "none"; };
+
+    photoBtn.onclick = () => imageInput.click();
+    imageInput.onchange = function() {
+      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { currentBase64Image = e.target.result; photoBtn.classList.add('has-image'); imagePreviewContainer.style.display = 'flex'; }; reader.readAsDataURL(file); }
+    };
+    removeImageBtn.onclick = () => { currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; };
+
+    function addItem() {
+      const name = itemInput.value.trim(); const amount = amountInput.value.trim() || "1"; const unit = unitSelect.value; const category = categorySelect.value || Object.keys(customCategories)[0] || 'Egyéb';
+      if (name !== '') { 
+        triggerLocalVibrate();
+        if (!allLists[currentListName]) allLists[currentListName] = []; 
+        allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); 
+        itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; 
+        saveAllToCloud(); itemInput.focus(); 
+      }
+    }
+
+    newListBtn.onclick = () => { 
+      const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; 
+      triggerLocalVibrate(); allLists[trimmed] = []; currentListName = trimmed; localStorage.setItem('currentShoppingListName', currentListName);
+      updateSelector(); renderList(); saveAllToCloud(); 
+    };
+
+    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
+
+    addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
+    listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
+
+    updateVibeToggleButtonUI();
+    customCategories = defaultCategories;
+    updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
+  </script>
+</body>
+</html>
