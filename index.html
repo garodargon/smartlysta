@@ -12,16 +12,19 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* KELLEMES TÜRKIZ ALAP ÉS FINOM ÁTMENET */
     body {
-      background-color: #f0f4f8;
-      color: #1e293b;
+      background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+      background-attachment: fixed;
+      color: #f8fafc;
       padding: 15px;
       display: flex;
       justify-content: center;
+      min-height: 100vh;
     }
 
     .app-container {
@@ -31,15 +34,16 @@
     }
 
     header h1 {
-      font-size: 42px;
+      font-size: 44px;
       font-weight: 800;
       text-align: center;
       margin-bottom: 25px;
-      color: #0f172a;
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 15px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     /* REZGÉS KAPCSOLÓ GOMB */
@@ -48,17 +52,18 @@
       border: none;
       font-size: 32px;
       cursor: pointer;
-      color: #3b82f6;
+      color: #2dd4bf;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.2s;
+      transition: color 0.2s, transform 0.1s;
     }
+    .vibe-toggle-btn:active { transform: scale(0.9); }
     .vibe-toggle-btn.muted {
-      color: #94a3b8;
+      color: rgba(255, 255, 255, 0.4);
     }
 
-    /* LISTAVÁLASZTÓ ÓRIÁS MEZŐ */
+    /* LISTAVÁLASZTÓ MEZŐ */
     .list-selector-area {
       display: flex;
       gap: 15px;
@@ -67,37 +72,51 @@
 
     #listSelect {
       flex: 1;
-      padding: 25px;
-      font-size: 30px;
+      padding: 22px;
+      font-size: 28px;
       font-weight: bold;
-      border: 4px solid #cbd5e1;
-      border-radius: 20px;
-      background-color: white;
-      color: #0f172a;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #listSelect option {
+      background-color: #115e59;
+      color: #ffffff;
     }
 
-    /* ÓRIÁS BEVITELI MEZŐK */
+    /* MODERN BEVITELI MEZŐK */
     .input-area-container {
-      background: white;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       padding: 25px;
-      border-radius: 30px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      margin-bottom: 25px;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
     }
 
     #itemInput {
       width: 100%;
-      padding: 30px;
-      font-size: 36px;
+      padding: 25px;
+      font-size: 32px;
       font-weight: bold;
-      border: 4px solid #cbd5e1;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
       margin-bottom: 20px;
-      color: #0f172a;
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    #itemInput::placeholder {
+      color: rgba(255, 255, 255, 0.6);
     }
 
-    #itemInput:focus, #listSelect:focus {
-      border-color: #3b82f6;
+    #itemInput:focus, #listSelect:focus, #amountInput:focus, #unitSelect:focus, #categorySelect:focus {
+      border-color: #2dd4bf;
+      box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
       outline: none;
     }
 
@@ -114,26 +133,30 @@
     }
 
     #amountInput {
-      width: 140px;
-      padding: 25px;
-      font-size: 32px;
+      width: 130px;
+      padding: 22px;
+      font-size: 28px;
       font-weight: bold;
       text-align: center;
-      border: 4px solid #cbd5e1;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      color: #0f172a;
-      background-color: white;
+      color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     #unitSelect, #categorySelect {
       flex: 1;
-      padding: 25px;
-      font-size: 30px;
+      padding: 22px;
+      font-size: 28px;
       font-weight: bold;
-      border: 4px solid #cbd5e1;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      background-color: #f8fafc;
-      color: #0f172a;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    #unitSelect option, #categorySelect option {
+      background-color: #115e59;
+      color: #ffffff;
     }
 
     .actions-row {
@@ -142,7 +165,7 @@
     }
 
     .icon-btn {
-      padding: 25px;
+      padding: 22px;
       font-size: 32px;
       border: none;
       border-radius: 20px;
@@ -150,28 +173,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.1s;
     }
+    .icon-btn:active, .add-btn:active, .secondary-btn:active { transform: scale(0.96); }
 
     .icon-btn.add { background-color: #10b981; color: white; }
     .icon-btn.delete { background-color: #ef4444; color: white; }
     
     .photo-btn {
       flex: 1;
-      background-color: #64748b;
+      background-color: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
       font-weight: bold;
       gap: 10px;
     }
     .photo-btn.has-image {
-      background-color: #3b82f6;
+      background-color: #06b6d4;
+      border-color: #2dd4bf;
     }
 
     .add-btn {
       flex: 1.5;
-      background-color: #3b82f6;
-      color: white;
-      font-size: 32px;
+      background-color: #2dd4bf;
+      color: #0f766e;
+      font-size: 30px;
       font-weight: 800;
       border: none;
       border-radius: 20px;
@@ -180,10 +206,12 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      box-shadow: 0 4px 14px rgba(45, 212, 191, 0.3);
     }
 
     #imagePreviewContainer {
-      background-color: #e0f2fe;
+      background-color: rgba(6, 182, 212, 0.2);
+      border: 1px solid #2dd4bf;
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 25px;
@@ -192,7 +220,7 @@
       align-items: center;
       font-size: 28px;
       font-weight: bold;
-      color: #0369a1;
+      color: #2dd4bf;
     }
     #removeImageBtn {
       background: none;
@@ -201,44 +229,48 @@
       cursor: pointer;
     }
 
-    /* KATEGÓRIA KÁRTYÁK ÉS LISTAELEMEK */
+    /* LEHALVÁNYÍTOTT, ÁTTETSZŐ KATEGÓRIA KÁRTYÁK */
     .category-card {
-      background: white;
-      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 32px;
       padding: 25px;
       margin-bottom: 30px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
     }
 
     .category-title {
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 800;
       padding-bottom: 15px;
       margin-bottom: 20px;
-      border-bottom: 4px solid #f1f5f9;
-      color: #475569;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.85);
     }
 
     .item-list-container {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
     }
 
+    /* TISZTA FEHÉR LISTAELEMEK SÖTÉT SZÖVEGGEL A JÓ OLVASHATÓSÁGÉRT */
     .list-item {
       display: flex;
       align-items: center;
-      background: #f8fafc;
-      padding: 25px;
+      background: #ffffff;
+      padding: 22px;
       border-radius: 20px;
       gap: 20px;
-      border: 2px solid #e2e8f0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     .checkbox {
-      width: 70px;
-      height: 70px;
-      border: 5px solid #cbd5e1;
+      width: 65px;
+      height: 65px;
+      border: 4px solid #cbd5e1;
       border-radius: 18px;
       display: flex;
       align-items: center;
@@ -246,11 +278,11 @@
       background: white;
       cursor: pointer;
       flex-shrink: 0;
-      font-size: 40px;
+      font-size: 38px;
       color: #10b981;
     }
 
-    .list-item.checked { opacity: 0.5; }
+    .list-item.checked { opacity: 0.45; background: rgba(255, 255, 255, 0.8); }
     .list-item.checked .checkbox { background: #e2e8f0; border-color: #cbd5e1; }
     .list-item.checked .item-text { text-decoration: line-through; color: #64748b; }
 
@@ -263,29 +295,29 @@
     }
 
     .item-text {
-      font-size: 36px;
+      font-size: 34px;
       font-weight: 700;
       word-break: break-word;
-      color: #0f172a;
+      color: #0f172a; /* Sötét szín, hogy tökéletesen olvasható legyen */
     }
 
     .unit-badge {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: bold;
-      color: #64748b;
-      background: #e2e8f0;
+      color: #475569;
+      background: #f1f5f9;
       padding: 4px 14px;
       border-radius: 10px;
       width: fit-content;
     }
 
     .item-img {
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
       object-fit: cover;
       border-radius: 15px;
       cursor: pointer;
-      border: 3px solid #3b82f6;
+      border: 3px solid #06b6d4;
     }
 
     .item-actions {
@@ -293,38 +325,38 @@
       gap: 10px;
     }
     .item-actions button {
-      padding: 20px;
-      font-size: 28px;
+      padding: 18px;
+      font-size: 26px;
       border: none;
       border-radius: 15px;
       cursor: pointer;
     }
-    .edit-btn { background: #e2e8f0; color: #475569; }
+    .edit-btn { background: #f1f5f9; color: #475569; }
     .delete-btn { background: #fee2e2; color: #ef4444; }
 
     .empty-state {
       text-align: center;
-      font-size: 30px;
-      color: #64748b;
+      font-size: 28px;
+      color: rgba(255, 255, 255, 0.6);
       padding: 40px;
       font-weight: bold;
     }
 
     .secondary-btn {
       width: 100%;
-      padding: 25px;
-      font-size: 30px;
+      padding: 22px;
+      font-size: 28px;
       font-weight: bold;
-      background: #e2e8f0;
-      color: #1e293b;
-      border: none;
-      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border-radius: 24px;
       margin-top: 10px;
       margin-bottom: 50px;
       cursor: pointer;
     }
 
-    /* MODAL ABLAKOK ALAP STÍLUSAI */
+    /* MODAL ABLAKOK */
     .modal {
       display: none;
       position: fixed;
@@ -333,26 +365,15 @@
       top: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0,0,0,0.6);
+      background-color: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       padding: 20px;
     }
 
-    .modal-content {
-      margin: auto;
-      display: block;
-      width: 100%;
-      max-width: 500px;
-      max-height: 80vh;
-      object-fit: contain;
-      border-radius: 20px;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
     .modal-card {
-      background: white;
-      border-radius: 30px;
+      background: #ffffff;
+      border-radius: 32px;
       padding: 30px;
       width: 100%;
       max-width: 500px;
@@ -360,11 +381,12 @@
       position: relative;
       top: 50%;
       transform: translateY(-50%);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+      color: #0f172a;
     }
 
     .modal-card h2 {
-      font-size: 36px;
+      font-size: 34px;
       margin-bottom: 25px;
       color: #0f172a;
     }
@@ -375,9 +397,18 @@
       right: 25px;
       font-size: 60px;
       font-weight: bold;
-      color: #64748b;
+      color: #94a3b8;
       cursor: pointer;
       line-height: 1;
+    }
+
+    /* SÖTÉTEBB MEZŐK A MODALBAN A KONTRASZT MIATT */
+    .add-cat-form #newCatIcon, .add-cat-form #newCatName,
+    .edit-form-container #editItemName, .edit-form-container #editItemCategoryConfig,
+    .edit-amount-row #editItemAmount, .edit-amount-row #editItemUnit {
+      border: 2px solid #cbd5e1 !important;
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
     }
 
     /* KATEGÓRIA KEZELŐ FIX ELRENDEZÉSE */
@@ -394,21 +425,14 @@
       padding: 15px !important;
       font-size: 26px !important;
       text-align: center !important;
-      border: 3px solid #cbd5e1 !important;
       border-radius: 15px !important;
-      background-color: white !important;
-      color: #0f172a !important;
     }
     .add-cat-form #newCatName {
       flex: 1 !important;
       width: 100% !important;
       padding: 15px !important;
       font-size: 26px !important;
-      border: 3px solid #cbd5e1 !important;
       border-radius: 15px !important;
-      background-color: white !important;
-      color: #0f172a !important;
-      display: block;
     }
     .add-cat-form #saveNewCatBtn {
       width: 65px !important;
@@ -417,6 +441,8 @@
       padding: 0 !important;
       font-size: 26px !important;
       flex-shrink: 0 !important;
+      background-color: #0f766e;
+      color: white;
     }
 
     #categoryManageList {
@@ -431,9 +457,9 @@
       justify-content: space-between;
       align-items: center;
       padding: 20px;
-      background: #f8fafc;
+      background: #f1f5f9;
       border-radius: 15px;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: bold;
       color: #0f172a;
     }
@@ -454,14 +480,10 @@
     .edit-form-container #editItemName, 
     .edit-form-container #editItemCategoryConfig {
       width: 100% !important;
-      padding: 25px !important;
-      font-size: 32px !important;
+      padding: 22px !important;
+      font-size: 30px !important;
       font-weight: bold !important;
-      border: 4px solid #cbd5e1 !important;
       border-radius: 20px !important;
-      background-color: white !important;
-      color: #0f172a !important;
-      display: block;
     }
     .edit-amount-row {
       display: flex !important;
@@ -470,28 +492,25 @@
       width: 100% !important;
     }
     .edit-amount-row #editItemAmount {
-      width: 140px !important;
-      min-width: 140px !important;
-      padding: 25px !important;
-      font-size: 32px !important;
+      width: 130px !important;
+      min-width: 130px !important;
+      padding: 22px !important;
+      font-size: 30px !important;
       font-weight: bold !important;
-      border: 4px solid #cbd5e1 !important;
       border-radius: 20px !important;
       text-align: center;
-      background-color: white !important;
-      color: #0f172a !important;
     }
     .edit-amount-row #editItemUnit {
       flex: 1 !important;
       width: 100% !important;
-      padding: 25px !important;
-      font-size: 32px !important;
+      padding: 22px !important;
+      font-size: 30px !important;
       font-weight: bold !important;
-      border: 4px solid #cbd5e1 !important;
       border-radius: 20px !important;
-      background-color: white !important;
-      color: #0f172a !important;
-      display: block;
+    }
+    .edit-form-container .add-btn {
+      background-color: #0f766e;
+      color: white;
     }
   </style>
 </head>
@@ -501,7 +520,7 @@
     <header>
       <h1>
         🛒 Smartysta 
-        <span id="syncIndicator" style="font-size: 32px; color: #e74c3c;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span>
+        <span id="syncIndicator" style="font-size: 32px; color: #ef4444;" title="Kapcsolódás..."><i class="fas fa-cloud"></i></span>
         <button id="vibeToggleBtn" class="vibe-toggle-btn" title="Rezgések ki/be"><i class="fas fa-volume-up"></i></button>
       </h1>
     </header>
@@ -509,7 +528,7 @@
     <div class="list-selector-area">
       <select id="listSelect"></select>
       <button class="icon-btn add" id="newListBtn" title="Új lista"><i class="fas fa-folder-plus"></i></button>
-      <button class="icon-btn delete" id="deleteListBtn" title="Torsles"><i class="fas fa-trash-alt"></i></button>
+      <button class="icon-btn delete" id="deleteListBtn" title="Törlés"><i class="fas fa-trash-alt"></i></button>
     </div>
 
     <div class="input-area-container">
@@ -544,7 +563,7 @@
 
     <div id="shoppingList"></div>
     
-    <button id="manageCatsBtn" class="secondary-btn"><i class="fas fa-tags"></i> Kategóriák</button>
+    <button id="manageCatsBtn" class="secondary-btn"><i class="fas fa-tags"></i> Kategóriák kezelése</button>
   </div>
 
   <div id="imageModal" class="modal">
@@ -590,14 +609,14 @@
         
         <div class="edit-photo-area">
           <input type="file" id="editItemImageInput" accept="image/*" style="display: none;">
-          <button class="secondary-btn" id="editItemPhotoBtn" style="margin:0;"><i class="fas fa-camera"></i> Új fotó</button>
-          <div id="editImagePreview" style="margin-top:15px; display:none; justify-content:space-between; align-items:center; background:#f0f4f8; padding:20px; border-radius:14px;">
+          <button class="secondary-btn" id="editItemPhotoBtn" style="margin:0; color:#0f172a; border-color:#cbd5e1;"><i class="fas fa-camera"></i> Új fotó</button>
+          <div id="editImagePreview" style="margin-top:15px; display:none; justify-content:space-between; align-items:center; background:#f1f5f9; padding:20px; border-radius:14px;">
             <span>📸 Kép OK!</span>
             <button id="removeEditImageBtn" style="background:none; border:none; font-size:40px;">❌</button>
           </div>
         </div>
         
-        <button id="saveEditItemBtn" class="add-btn" style="width:100%; margin-top:25px; padding:30px;"><i class="fas fa-save"></i> Mentés</button>
+        <button id="saveEditItemBtn" class="add-btn" style="width:100%; margin-top:25px; padding:25px;"><i class="fas fa-save"></i> Mentés</button>
       </div>
     </div>
   </div>
@@ -642,10 +661,6 @@
     let isLocalAction = false; 
 
     let isVibrationEnabled = localStorage.getItem('vibrationEnabled') !== 'false';
-    
-    // APP BADGE (IKON JELVÉNY) SZÁMLÁLÓ
-    let badgeCount = 0;
-    let isAppFocused = true;
 
     const defaultCategories = {
       'Pékáru': { icon: '🍞' },
@@ -658,30 +673,6 @@
       'Egyéb': { icon: '❓' }
     };
     let customCategories = {};
-
-    // FIGYELJÜK A FÓKUSZT
-    window.addEventListener('focus', () => {
-      isAppFocused = true;
-      clearAppBadge();
-    });
-    window.addEventListener('blur', () => {
-      isAppFocused = false;
-    });
-
-    function updateAppBadge() {
-      // Csak akkor növeljük és küldjük, ha nem nézzük épp az appot
-      if (!isAppFocused && 'setAppBadge' in navigator) {
-        badgeCount++;
-        navigator.setAppBadge(badgeCount).catch(err => console.log("Badge hiba:", err));
-      }
-    }
-
-    function clearAppBadge() {
-      badgeCount = 0;
-      if ('clearAppBadge' in navigator) {
-        navigator.clearAppBadge().catch(err => console.log("Badge törlés hiba:", err));
-      }
-    }
 
     function updateVibeToggleButtonUI() {
       if (isVibrationEnabled) {
@@ -701,15 +692,11 @@
     };
 
     function triggerLocalVibrate() {
-      if (isVibrationEnabled && 'vibrate' in navigator) {
-        navigator.vibrate(80); 
-      }
+      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate(80); 
     }
 
     function triggerRemoteUpdateVibrate() {
-      if (isVibrationEnabled && 'vibrate' in navigator) {
-        navigator.vibrate([100, 100, 100]); 
-      }
+      if (isVibrationEnabled && 'vibrate' in navigator) navigator.vibrate([100, 100, 100]); 
     }
 
     function saveAllToCloud() {
@@ -735,12 +722,9 @@
       }
 
       if (remoteData.lists) allLists = remoteData.lists;
+      if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
 
-      if (!allLists[currentListName]) {
-        currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
-      }
-
-      syncIndicator.style.color = "#2ecc71";
+      syncIndicator.style.color = "#2dd4bf";
       updateCategoryDropdowns();
       updateSelector();
       renderList();
@@ -754,10 +738,7 @@
         try {
           const response = JSON.parse(event.data);
           if (response && response.data) {
-            if (!isLocalAction) { 
-              triggerRemoteUpdateVibrate(); 
-              updateAppBadge(); // ÉRTESÍTÉSI PÖTTY KIKÜLDÉSE
-            }
+            if (!isLocalAction) triggerRemoteUpdateVibrate(); 
             
             if (response.path === "/") {
               handleRemoteData(response.data);
@@ -770,7 +751,7 @@
               updateCategoryDropdowns();
               renderList();
             }
-            syncIndicator.style.color = "#2ecc71";
+            syncIndicator.style.color = "#2dd4bf";
           }
         } catch (e) {}
       });
@@ -779,10 +760,7 @@
         try {
           const response = JSON.parse(event.data);
           if (response && response.data) {
-            if (!isLocalAction) { 
-              triggerRemoteUpdateVibrate(); 
-              updateAppBadge();
-            }
+            if (!isLocalAction) triggerRemoteUpdateVibrate();
             handleRemoteData(response.data);
           }
         } catch(err) {}
@@ -790,10 +768,8 @@
 
       eventSource.onerror = function() {
         fetch(targetUrl).then(res => res.json()).then(remoteData => {
-          if (remoteData) {
-            handleRemoteData(remoteData);
-          }
-        }).catch(() => { syncIndicator.style.color = "#e74c3c"; });
+          if (remoteData) handleRemoteData(remoteData);
+        }).catch(() => { syncIndicator.style.color = "#ef4444"; });
       };
     }
 
@@ -972,19 +948,10 @@
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
 
-    // INDÍTÁS ÉS HÁTTÉRMUNKÁS (SERVICE WORKER) REGISZTRÁCIÓ
+    // REZISZTRÁCIÓK ÉS INDÍTÁS
     updateVibeToggleButtonUI();
     customCategories = defaultCategories;
     updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
-    clearAppBadge();
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker kész!', reg.scope))
-          .catch(err => console.error('Service Worker hiba:', err));
-      });
-    }
   </script>
 </body>
 </html>
