@@ -256,7 +256,7 @@
       gap: 15px;
     }
 
-    /* TISZTA FEHÉR LISTAELEMEK SÖTÉT SZÖVEGGEL A JÓ OLVASHATÓSÁGÉRT */
+    /* TISZTA FEHÉR LISTAELEMEK SÖTÉT SZÖVEGGEL */
     .list-item {
       display: flex;
       align-items: center;
@@ -298,7 +298,7 @@
       font-size: 34px;
       font-weight: 700;
       word-break: break-word;
-      color: #0f172a; /* Sötét szín, hogy tökéletesen olvasható legyen */
+      color: #0f172a;
     }
 
     .unit-badge {
@@ -402,7 +402,6 @@
       line-height: 1;
     }
 
-    /* SÖTÉTEBB MEZŐK A MODALBAN A KONTRASZT MIATT */
     .add-cat-form #newCatIcon, .add-cat-form #newCatName,
     .edit-form-container #editItemName, .edit-form-container #editItemCategoryConfig,
     .edit-amount-row #editItemAmount, .edit-amount-row #editItemUnit {
@@ -411,7 +410,6 @@
       color: #0f172a !important;
     }
 
-    /* KATEGÓRIA KEZELŐ FIX ELRENDEZÉSE */
     .add-cat-form {
       display: flex !important;
       gap: 10px !important;
@@ -662,25 +660,26 @@
 
     let isVibrationEnabled = localStorage.getItem('vibrationEnabled') !== 'false';
 
+    // FIX ÉS KÖTELEZŐEN KIKÉNYSZERÍTETT SORRENDŰ ALAPÉRTELMEZETT KATEGÓRIÁK
     const defaultCategories = {
       'Pékáru': { icon: '🍞' },
+      'Húsfélék': { icon: '🥩' },
       'Tejtermék': { icon: '🥛' },
       'Zöldség-Gyümölcs': { icon: '🍎' },
-      'Húsáru': { icon: '🥩' },
+      'Háztartási': { icon: '🧻' },
+      'Vegyiáru': { icon: '🧼' },
       'Szárazáru': { icon: '🍝' },
-      'Vegyszer': { icon: '🧼' },
-      'Háztartás': { icon: '🧻' },
       'Egyéb': { icon: '❓' }
     };
     let customCategories = {};
 
     function updateVibeToggleButtonUI() {
       if (isVibrationEnabled) {
-        vibeToggleBtn.classList.remove('muted');
         vibeToggleBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        vibeToggleBtn.classList.remove('muted');
       } else {
-        vibeToggleBtn.classList.add('muted');
         vibeToggleBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        vibeToggleBtn.classList.add('muted');
       }
     }
 
@@ -714,14 +713,41 @@
     function handleRemoteData(remoteData) {
       if (!remoteData) return;
 
-      if (!remoteData.categories || Object.keys(remoteData.categories).length === 0) {
+      // Ha nincs még kategória a felhőben, vagy a régi struktúra van meg, kényszerítsük az új sorrendet
+      if (!remoteData.categories || !remoteData.categories['Húsfélék']) {
         customCategories = defaultCategories;
         saveAllToCloud();
       } else {
-        customCategories = remoteData.categories;
+        // Megtartjuk a felhőben lévő kategóriákat, de az új sorrendet kényszerítjük ki rájuk
+        const ordered = {};
+        Object.keys(defaultCategories).forEach(key => {
+          if (remoteData.categories[key]) {
+            ordered[key] = remoteData.categories[key];
+          } else if (key === 'Húsfélék' && remoteData.categories['Húsáru']) {
+            ordered['Húsfélék'] = { icon: '🥩' };
+          } else {
+            ordered[key] = defaultCategories[key];
+          }
+        });
+        // Az esetlegesen felhasználó által manuálisan hozzáadott többi kategóriát a végére fűzzük
+        Object.keys(remoteData.categories).forEach(key => {
+          if (!ordered[key] && key !== 'Húsáru') ordered[key] = remoteData.categories[key];
+        });
+        customCategories = ordered;
       }
 
-      if (remoteData.lists) allLists = remoteData.lists;
+      if (remoteData.lists) {
+        allLists = remoteData.lists;
+        // Ha maradtak régi "Húsáru" kategóriás termékek, migráljuk át őket "Húsfélék"-re
+        Object.keys(allLists).forEach(listName => {
+          if (allLists[listName]) {
+            allLists[listName].forEach(item => {
+              if (item.category === 'Húsáru') item.category = 'Húsfélék';
+            });
+          }
+        });
+      }
+      
       if (!allLists[currentListName]) currentListName = Object.keys(allLists)[0] || 'Alapértelmezett';
 
       syncIndicator.style.color = "#2dd4bf";
@@ -742,14 +768,9 @@
             
             if (response.path === "/") {
               handleRemoteData(response.data);
-            } else if (response.path === "/lists") {
-              allLists = response.data;
-              updateSelector();
-              renderList();
-            } else if (response.path === "/categories") {
-              customCategories = response.data || defaultCategories;
-              updateCategoryDropdowns();
-              renderList();
+            } else {
+              // Biztonsági okokból bármilyen részleges frissítésnél újraolvassuk a teljes adatbázist
+              fetch(targetUrl).then(res => res.json()).then(d => handleRemoteData(d));
             }
             syncIndicator.style.color = "#2dd4bf";
           }
@@ -807,11 +828,13 @@
       for (let i = items.length - 1; i >= 0; i--) {
         const item = items[i];
         let cat = item.category || fallbackCategory;
+        if (cat === 'Húsáru') cat = 'Húsfélék';
         if (!customCategories[cat]) cat = fallbackCategory;
         if (!groupedItems[cat]) groupedItems[cat] = [];
         groupedItems[cat].push({ ...item, originalIndex: i });
       }
 
+      // Pontosan a kikényszerített kulcssorrend alapján megyünk végig a listázásnál
       availableCategories.forEach(categoryName => {
         const categoryGroup = groupedItems[categoryName];
         if (!categoryGroup || categoryGroup.length === 0) return;
@@ -859,7 +882,7 @@
     function openEditModalWindow(index) {
       editingItemIndex = index; const item = allLists[currentListName][index];
       editItemName.value = item.name; editItemAmount.value = item.amount; editItemUnit.value = item.unit;
-      editItemCategoryConfig.value = item.category || Object.keys(customCategories)[0] || 'Egyéb';
+      editItemCategoryConfig.value = item.category === 'Húsáru' ? 'Húsfélék' : (item.category || Object.keys(customCategories)[0] || 'Egyéb');
       editingBase64Image = item.image || "";
       editImagePreview.style.display = editingBase64Image ? 'flex' : 'none';
       editItemModal.style.display = "block";
@@ -948,7 +971,7 @@
     addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
     listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
 
-    // REZISZTRÁCIÓK ÉS INDÍTÁS
+    // INDÍTÁS
     updateVibeToggleButtonUI();
     customCategories = defaultCategories;
     updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
