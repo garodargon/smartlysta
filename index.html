@@ -75,9 +75,9 @@
       padding: 22px;
       font-size: 28px;
       font-weight: bold;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 24px;
-      background-color: rgba(255, 255, 255, 0.07);
+      background-color: rgba(255, 255, 255, 0.15);
       color: #ffffff;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -87,15 +87,15 @@
       color: #ffffff;
     }
 
-    /* EGYSÉGESÍTETT, HALVÁNYÍTOTT FELSŐ BUBORÉK */
+    /* VISSZAÁLLÍTOTT VILÁGOSABB BEVITELI MEZŐK */
     .input-area-container {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       padding: 25px;
       border-radius: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
       margin-bottom: 30px;
     }
 
@@ -104,14 +104,14 @@
       padding: 25px;
       font-size: 32px;
       font-weight: bold;
-      border: 2px solid rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
       margin-bottom: 20px;
       color: #ffffff;
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.1);
     }
     #itemInput::placeholder {
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.6);
     }
 
     #itemInput:focus, #listSelect:focus, #amountInput:focus, #unitSelect:focus, #categorySelect:focus {
@@ -138,10 +138,10 @@
       font-size: 28px;
       font-weight: bold;
       text-align: center;
-      border: 2px solid rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
       color: #ffffff;
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     #unitSelect, #categorySelect {
@@ -149,9 +149,9 @@
       padding: 22px;
       font-size: 28px;
       font-weight: bold;
-      border: 2px solid rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 20px;
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.1);
       color: #ffffff;
     }
     #unitSelect option, #categorySelect option {
@@ -182,8 +182,8 @@
     
     .photo-btn {
       flex: 1;
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background-color: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: white;
       font-weight: bold;
       gap: 10px;
@@ -229,7 +229,7 @@
       cursor: pointer;
     }
 
-    /* KATEGÓRIA KÁRTYÁK */
+    /* LEHALVÁNYÍTOTT KATEGÓRIA KÁRTYÁK */
     .category-card {
       background: rgba(255, 255, 255, 0.07);
       backdrop-filter: blur(10px);
@@ -342,7 +342,7 @@
       font-weight: bold;
     }
 
-    /* MENTÉS ÉS VISSZATÖLTÉS PANEL */
+    /* MENTÉS ÉS VISSZATÖLTÉS UTOLSÓ VERZIÓ SZERINTI SZEKCIÓ */
     .backup-row {
       display: flex;
       gap: 15px;
@@ -355,8 +355,8 @@
       padding: 22px;
       font-size: 26px;
       font-weight: bold;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: #ffffff;
       border-radius: 24px;
       cursor: pointer;
@@ -460,55 +460,4 @@
 
     #categoryManageList {
       max-height: 300px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .manage-cat-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      background: #f1f5f9;
-      border-radius: 15px;
-      font-size: 28px;
-      font-weight: bold;
-      color: #0f172a;
-    }
-    .delete-cat-btn {
-      background: none;
-      border: none;
-      color: #ef4444;
-      font-size: 36px;
-      cursor: pointer;
-    }
-
-    /* TERMÉK SZERKESZTŐ */
-    .edit-form-container {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-    .edit-form-container #editItemName, 
-    .edit-form-container #editItemCategoryConfig {
-      width: 100% !important;
-      padding: 22px !important;
-      font-size: 30px !important;
-      font-weight: bold !important;
-      border-radius: 20px !important;
-    }
-    .edit-amount-row {
-      display: flex !important;
-      flex-direction: row !important;
-      gap: 15px !important;
-      width: 100% !important;
-    }
-    .edit-amount-row #editItemAmount {
-      width: 130px !important;
-      min-width: 130px !important;
-      padding: 22px !important;
-      font-size: 30px !important;
-      font-weight: bold !important;
-      border-radius: 20px !important;
-      text-
+      overflow
