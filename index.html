@@ -355,7 +355,7 @@
     }
 
     .secondary-btn {
-      flex: 1;
+      width: 100%;
       padding: 22px;
       font-size: 26px;
       font-weight: bold;
@@ -375,7 +375,7 @@
       margin-bottom: 50px;
     }
 
-    /* MODAL ABLAKOK */
+    /* MODAL ABLAKOK ALAPBEÁLLÍTÁSAI */
     .modal {
       display: none;
       position: fixed;
@@ -388,6 +388,7 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       padding: 20px;
+      overflow-y: auto;
     }
 
     .modal-card {
@@ -396,10 +397,8 @@
       padding: 30px;
       width: 100%;
       max-width: 500px;
-      margin: auto;
+      margin: 40px auto;
       position: relative;
-      top: 50%;
-      transform: translateY(-50%);
       box-shadow: 0 25px 50px rgba(0,0,0,0.3);
       color: #0f172a;
     }
@@ -419,6 +418,19 @@
       color: #94a3b8;
       cursor: pointer;
       line-height: 1;
+    }
+
+    /* KÉPNÉZŐ MODAL STÍLUSAI */
+    .modal-content {
+      display: block;
+      margin: auto;
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 16px;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     .add-cat-form #newCatIcon, .add-cat-form #newCatName,
@@ -591,7 +603,7 @@
 
   <div id="imageModal" class="modal">
     <span class="modal-close" id="closeImgModal">&times;</span>
-    <img class="modal-content" id="modalImg">
+    <img class="modal-content" id="modalImg" alt="Nagyított kép">
   </div>
 
   <div id="categoryModal" class="modal">
@@ -678,6 +690,18 @@
     const newCatIcon = document.getElementById('newCatIcon');
     const newCatName = document.getElementById('newCatName');
     const saveNewCatBtn = document.getElementById('saveNewCatBtn');
+
+    const editItemModal = document.getElementById('editItemModal');
+    const editItemName = document.getElementById('editItemName');
+    const editItemAmount = document.getElementById('editItemAmount');
+    const editItemUnit = document.getElementById('editItemUnit');
+    const editItemCategoryConfig = document.getElementById('editItemCategoryConfig');
+    const editItemPhotoBtn = document.getElementById('editItemPhotoBtn');
+    const editItemImageInput = document.getElementById('editItemImageInput');
+    const editImagePreview = document.getElementById('editImagePreview');
+    const removeEditImageBtn = document.getElementById('removeEditImageBtn');
+    const saveEditItemBtn = document.getElementById('saveEditItemBtn');
+    const closeEditModal = document.getElementById('closeEditModal');
 
     let allLists = { 'Alapértelmezett': [] };
     let currentListName = localStorage.getItem('currentShoppingListName') || 'Alapértelmezett';
@@ -845,7 +869,7 @@
         categoryGroup.forEach(item => {
           const itemDiv = document.createElement('div');
           itemDiv.className = `list-item ${item.checked ? 'checked' : ''}`;
-          const imgHtml = item.image ? `<img src="${item.image}" class="item-img">` : '';
+          const imgHtml = item.image ? `<img src="${item.image}" class="item-img" alt="termék">` : '';
           itemDiv.innerHTML = `
             <div class="checkbox">${item.checked ? '<i class="fas fa-check"></i>' : ''}</div>
             <div class="item-text-container"><span class="item-text">${item.name}</span><span class="unit-badge">${item.amount} ${item.unit}</span></div>
@@ -955,43 +979,104 @@
       }
     };
 
-    manageCatsBtn.onclick = () => { catModal.style.display = "block"; renderManageCategoryList(); };
-    closeCatModal.onclick = () => catModal.style.display = "none";
-    closeImgModal.onclick = () => imgModal.style.display = "none";
-    closeEditModal.onclick = () => editItemModal.style.display = "none";
-    window.onclick = e => { if (e.target === imgModal) imgModal.style.display = "none"; if (e.target === catModal) catModal.style.display = "none"; if (e.target === editItemModal) editItemModal.style.display = "none"; };
-
+    // --- FŐ INPUT KÉPKEZELÉSE ---
     photoBtn.onclick = () => imageInput.click();
     imageInput.onchange = function() {
-      const file = this.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => { currentBase64Image = e.target.result; photoBtn.classList.add('has-image'); imagePreviewContainer.style.display = 'flex'; }; reader.readAsDataURL(file); }
-    };
-    removeImageBtn.onclick = () => { currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; };
-
-    function addItem() {
-      const name = itemInput.value.trim(); const amount = amountInput.value.trim() || "1"; const unit = unitSelect.value; const category = categorySelect.value || Object.keys(customCategories)[0] || 'Egyéb';
-      if (name !== '') { 
-        triggerLocalVibrate();
-        if (!allLists[currentListName]) allLists[currentListName] = []; 
-        allLists[currentListName].push({ name, amount, unit, category, image: currentBase64Image, checked: false }); 
-        itemInput.value = ''; amountInput.value = '1'; currentBase64Image = ""; imageInput.value = ""; photoBtn.classList.remove('has-image'); imagePreviewContainer.style.display = 'none'; 
-        saveAllToCloud(); itemInput.focus(); 
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          currentBase64Image = e.target.result;
+          imagePreviewContainer.style.display = 'flex';
+          photoBtn.classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
       }
-    }
-
-    newListBtn.onclick = () => { 
-      const name = prompt('Új lista neve:'); if (!name || name.trim() === '') return; const trimmed = name.trim(); if (allLists[trimmed]) return; 
-      triggerLocalVibrate(); allLists[trimmed] = []; currentListName = trimmed; localStorage.setItem('currentShoppingListName', currentListName);
-      updateSelector(); renderList(); saveAllToCloud(); 
+    };
+    removeImageBtn.onclick = () => {
+      currentBase64Image = "";
+      imageInput.value = "";
+      imagePreviewContainer.style.display = 'none';
+      photoBtn.classList.remove('has-image');
     };
 
-    deleteListBtn.onclick = () => { if (Object.keys(allLists).length <= 1) return; if (confirm(`Törlöd a(z) "${currentListName}" listát?`)) { triggerLocalVibrate(); delete allLists[currentListName]; currentListName = Object.keys(allLists)[0]; saveAllToCloud(); } };
+    // --- TERMÉK HOZZÁADÁSA ---
+    addBtn.onclick = () => {
+      const name = itemInput.value.trim();
+      if (name === "") return;
+      triggerLocalVibrate();
+      if (!allLists[currentListName]) allLists[currentListName] = [];
+      allLists[currentListName].push({
+        name,
+        amount: amountInput.value || "1",
+        unit: unitSelect.value,
+        category: categorySelect.value,
+        image: currentBase64Image,
+        checked: false
+      });
+      itemInput.value = '';
+      amountInput.value = '1';
+      currentBase64Image = "";
+      imageInput.value = "";
+      imagePreviewContainer.style.display = 'none';
+      photoBtn.classList.remove('has-image');
+      saveAllToCloud();
+    };
 
-    addBtn.onclick = addItem; itemInput.onkeypress = e => { if (e.key === 'Enter') addItem(); };
-    listSelect.onchange = () => { currentListName = listSelect.value.split(' (')[0]; localStorage.setItem('currentShoppingListName', currentListName); renderList(); };
+    // --- LISTA KEZELÉSE ---
+    listSelect.onchange = function() {
+      currentListName = this.value;
+      localStorage.setItem('currentShoppingListName', currentListName);
+      renderList();
+    };
 
+    newListBtn.onclick = () => {
+      const name = prompt("Új lista neve:");
+      if (!name) return;
+      const trimmed = name.trim();
+      if (trimmed === "" || allLists[trimmed]) return;
+      triggerLocalVibrate();
+      allLists[trimmed] = [];
+      currentListName = trimmed;
+      saveAllToCloud();
+    };
+
+    deleteListBtn.onclick = () => {
+      if (Object.keys(allLists).length <= 1) {
+        alert("Az utolsó listát nem törölheted!");
+        return;
+      }
+      if (confirm(`Biztosan törlöd a(z) "${currentListName}" listát a tartalmával együtt?`)) {
+        triggerLocalVibrate();
+        delete allLists[currentListName];
+        currentListName = Object.keys(allLists)[0];
+        saveAllToCloud();
+      }
+    };
+
+    // --- MODALOK MEZŐINEK NYITÁSA / ZÁRÁSA ---
+    manageCatsBtn.onclick = () => {
+      catModal.style.display = "block";
+      renderManageCategoryList();
+    };
+
+    closeCatModal.onclick = () => catModal.style.display = "none";
+    closeImgModal.onclick = () => imgModal.style.display = "none";
+    closeEditModal.onclick = () => {
+      editItemModal.style.display = "none";
+      editingItemIndex = null;
+    };
+
+    // Modal háttérre kattintva is bezáródjanak
+    window.onclick = function(event) {
+      if (event.target === catModal) catModal.style.display = "none";
+      if (event.target === imgModal) imgModal.style.display = "none";
+      if (event.target === editItemModal) editItemModal.style.display = "none";
+    };
+
+    // --- INDÍTÁS ---
     updateVibeToggleButtonUI();
-    customCategories = defaultCategories;
-    updateCategoryDropdowns(); updateSelector(); renderList(); startCloudSync();
+    startCloudSync();
   </script>
 </body>
 </html>
